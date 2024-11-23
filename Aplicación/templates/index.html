@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Doña Juanita</title>
+    <link rel="stylesheet" href="Productos/style.css"/>
+</head>
+<body>
+    <div id = "container">
+        <header>
+            <h1>Super Doña Juanita</h1>
+        </header>
+    </div>
+    <nav>
+        <ul>
+            Categorías Principales:
+            <br>
+            {% for categoria in categorias %}
+            <li>
+                <label>{{ categoria }}</label>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    <div class="clearfix"></div>
+
+    <section id="ofertas">
+        <article class="ofertas">
+            <h1>Promociones</h1>
+            <ul>
+                {% for producto in promociones %}
+                    <li>
+                        <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" width="100">
+                        <h4>{{ producto.nombre }}</h4>
+                        <h5></h4><p><del>₡{{ producto.precio }}</del>  ₡{{ producto.descuento }}</p></h5>
+                        <h5><p>Hasta: {{ producto.fecha }}</p></h5>
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
+
+    </section>
+
+    <aside>
+        <form action="/inicio" method="POST">
+            {% if mensaje %}
+            <div class="error-container">
+                <p class="error">{{ mensaje }}</p>
+            </div>
+            {% endif %}
+            <label for="correo">Correo:</label>
+            <br>
+            <input type="email" class="inputs" id="correo" name="correo" required>
+            <br>
+            <label for="contraseña">Contraseña:</label>
+            <br>
+            <input type="text" class="inputs "id="contraseña" name="contraseña" required>
+            <br>
+            <br>
+            <button type="submit"  class="botones">Ingresar</button>
+        </form>
+    </aside>
+</body>
+</html>
