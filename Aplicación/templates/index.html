@@ -1,27 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Distintas Funciones</title>
+    <title>Super Doña Juanita</title>
+    <link rel="stylesheet" href="Productos/style.css"/>
 </head>
 <body>
-    <h1>Ejemplo con Flask</h1>
+    <div id = "container">
+        <header>
+            <h1>Super Doña Juanita</h1>
+        </header>
+    </div>
+    <nav>
+        <ul>
+            Categorías Principales:
+            <br>
+            {% for categoria in categorias %}
+            <li>
+                <label>{{ categoria }}</label>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    <div class="clearfix"></div>
 
-    <!-- Formulario para Acción 1 -->
-    <form action="/accion1" method="POST">
-        <label for="dato">Dato para Acción 1:</label>
-        <input type="text" id="dato" name="dato" required>
-        <button type="submit">Ejecutar Acción 1</button>
-    </form>
+    <section id="ofertas">
+        <article class="ofertas">
+            <h1>Promociones</h1>
+            <ul>
+                {% for producto in promociones %}
+                    <li>
+                        <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" width="100">
+                        <h4>{{ producto.nombre }}</h4>
+                        <h5></h4><p><del>₡{{ producto.precio }}</del>  ₡{{ producto.descuento }}</p></h5>
+                        <h5><p>Hasta: {{ producto.fecha }}</p></h5>
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
 
-    <br>
+    </section>
 
-    <!-- Formulario para Acción 2 -->
-    <form action="/accion2" method="POST">
-        <label for="otro_dato">Dato para Acción 2:</label>
-        <input type="text" id="otro_dato" name="otro_dato" required>
-        <button type="submit">Ejecutar Acción 2</button>
-    </form>
+    <aside>
+        <form action="/inicio" method="POST">
+            {% if mensaje %}
+            <div class="error-container">
+                <p class="error">{{ mensaje }}</p>
+            </div>
+            {% endif %}
+            <label for="correo">Correo:</label>
+            <br>
+            <input type="email" class="inputs" id="correo" name="correo" required>
+            <br>
+            <label for="contraseña">Contraseña:</label>
+            <br>
+            <input type="text" class="inputs "id="contraseña" name="contraseña" required>
+            <br>
+            <br>
+            <button type="submit"  class="botones">Ingresar</button>
+        </form>
+    </aside>
 </body>
 </html>
