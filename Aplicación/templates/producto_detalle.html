@@ -13,7 +13,7 @@
         </header>
         <div class="producto-detalle">
             <div class="producto-imagen">
-                <img src="{{ url_for('static', filename=producto.imagen) }}" alt="{{ producto.nombre }}">
+                <img src="/{{ producto.imagen }}" alt="{{ producto.nombre }}" width="300">
             </div>
             <div class="producto-info">
                 <h2>{{ producto.nombre }}</h2>

@@ -26,11 +26,11 @@
                 <!-- Filtro por precio -->
                 <div class="form-group">
                     <label for="precio-min">Precio Mínimo:</label>
-                    <input type="number" id="precio-min" placeholder="Mínimo">
+                    <input type="number" id="precio-min" placeholder="Mínimo" min="0">
                 </div>
                 <div class="form-group">
                     <label for="precio-max">Precio Máximo:</label>
-                    <input type="number" id="precio-max" placeholder="Máximo">
+                    <input type="number" id="precio-max" placeholder="Máximo"  min="0">
                 </div>
 
                 <!-- Filtro por categoría -->
@@ -56,10 +56,14 @@
                 </div>
 
                 <!-- Filtro por popularidad -->
-                <label for="popularidad">Popularidad:</label>
-                <div class="popularidad-container">
-                    <input type="range" id="popularidad" min="1" max="10" value="5" oninput="actualizarValorPopularidad()">
-                    <span id="popularidad-valor">5</span>
+                <!-- Filtro por precio -->
+                <div class="form-group">
+                    <label for="precio-min">Calificación Mínima:</label>
+                    <input type="number" id="calif-min" placeholder="Mínimo" min="0" max="10">
+                </div>
+                <div class="form-group">
+                    <label for="precio-max">Calificación Máxima:</label>
+                    <input type="number" id="calif-max" placeholder="Máximo" min="0" max="10">
                 </div>
 
                 <!-- Botón para aplicar filtros -->
@@ -69,17 +73,10 @@
 
         <div class="nav-right">
             <a href="#">Ver carrito</a>
-            <a href="#">{{usuario[1]}} {{usuario[2]}}</a>
+            <a href="/cliente/{{ usuario[0] }}"> {{ usuario[1] }} {{ usuario[2] }}</a>
             <img src="Productos/user.png" width="30">
         </div>
     </nav>
-
-    <script>
-        function actualizarValorPopularidad() {
-            const valor = document.getElementById('popularidad').value;
-            document.getElementById('popularidad-valor').innerText = valor;
-        }
-    </script>
 
     <section id="ofertas">
         <article class="ofertas">
@@ -106,6 +103,15 @@
         </article>
 
     </section>
+
+    <div class="paginacion">
+        {% if hay_anterior %}
+            <a href="/inicio?pagina={{ pagina_actual - 1 }}" class="botones">Anterior</a>
+        {% endif %}
+        {% if hay_siguiente %}
+            <a href="/inicio?pagina={{ pagina_actual + 1 }}" class="botones">Siguiente</a>
+        {% endif %}
+    </div>
 </body>
 
 </html>

@@ -1,0 +1,21 @@
+body{
+    background-image: url("fondo2.png");
+    background-size: 1200px 800px;
+    font-family: Pixelify Sans Semibold, CeraPro, Times New Roman;
+}
+
+header{
+    background: brown;
+    border-radius: 8px;
+    height: 100px;
+    text-align: center;
+    line-height: 65px;
+    color: white;
+    border-top: 15px dashed white;
+    border-bottom: 15px dashed white;
+}
+
+#container{
+    width: 70%;
+    margin: 0px auto;
+}
