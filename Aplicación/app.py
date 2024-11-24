@@ -34,8 +34,16 @@ def inicio():
                                 mensaje="Usuario no registrado o credenciales incorrectas.",
                                 categorias=categorias,
                                 promociones=promociones)
+# Ruta para los detalles de un producto
+@app.route('/producto_detalle/<int:producto_id>')
+def producto_detalle(producto_id):
+    producto = getProductoDetalle(producto_id)
+    return render_template('producto_detalle.html', producto=producto)
 
 # Ruta para manejar acción 2
+#@app.route('/accion2', methods=['POST'])
+#def accion2():
+#    otro_dato = request.form.get('otro_dato')manejar acción 2
 #@app.route('/accion2', methods=['POST'])
 #def accion2():
 #    otro_dato = request.form.get('otro_dato')

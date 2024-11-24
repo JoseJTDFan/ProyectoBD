@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle de Producto</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Productos/producto_detalle.css') }}">
+</head>
+<body>
+    <div id="container">
+        <header>
+            <h1>{{ producto.nombre }}</h1>
+        </header>
+        <div class="producto-detalle">
+            <div class="producto-imagen">
+                <img src="{{ url_for('static', filename=producto.imagen) }}" alt="{{ producto.nombre }}">
+            </div>
+            <div class="producto-info">
+                <h2>{{ producto.nombre }}</h2>
+                <p class="precio">₡{{ producto.precio }}</p>
+                <p class="stock">Stock: {{ producto.Stock }}</p>
+                <p class="popularidad">Popularidad: {{ producto.popularidad }}</p>
+                <p class="descripcion">{{ producto.descripcion }}</p>
+                <form action="/añadir_carrito" method="post">
+                    <input type="hidden" name="producto_id" value="{{ producto.id }}">
+                    <button type="submit" class="boton-carrito">Añadir al carrito</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

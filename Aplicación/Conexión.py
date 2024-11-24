@@ -2,7 +2,7 @@ import pyodbc
 
 def prueba():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=RAYO\SQLEXPRESS;DATABASE=Ecommerce;UID=user;PWD=1234')
         print("Conexión exitosa.")
         cursor = connection.cursor()
         cursor.execute("SELECT @@version;")
@@ -20,7 +20,7 @@ def prueba():
 
 def getTop5Categorias():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=RAYO\SQLEXPRESS;DATABASE=Ecommerce;UID=user;PWD=1234')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerTop5Categorias")
         rows = cursor.fetchall()
@@ -35,7 +35,7 @@ def getTop5Categorias():
 
 def getPromocionesInicio():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=RAYO\SQLEXPRESS;DATABASE=Ecommerce;UID=user;PWD=1234')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerPromocionInicio")
         rows = cursor.fetchall()
@@ -56,7 +56,7 @@ def getPromocionesInicio():
 
 def validarUsuario(correo,contrasena):
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=RAYO\SQLEXPRESS;DATABASE=Ecommerce;UID=user;PWD=1234')
         cursor = connection.cursor()
         cursor.execute("EXEC ValidarUsuario @correo_electronico = ?, @contrasena = ?", correo, contrasena)
         result = cursor.fetchone()
@@ -71,7 +71,7 @@ def validarUsuario(correo,contrasena):
 
 def getNombresCategorias():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=RAYO\SQLEXPRESS;DATABASE=Ecommerce;UID=user;PWD=1234')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerCategorias")
         rows = cursor.fetchall()
@@ -87,7 +87,7 @@ def getNombresCategorias():
 
 def getNombresMarcas():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=RAYO\SQLEXPRESS;DATABASE=Ecommerce;UID=user;PWD=1234')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerMarcas")
         rows = cursor.fetchall()
@@ -103,7 +103,7 @@ def getNombresMarcas():
 
 def getOfertas():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=RAYO\SQLEXPRESS;DATABASE=Ecommerce;UID=user;PWD=1234')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerOfertas")
         rows = cursor.fetchall()
@@ -124,7 +124,7 @@ def getOfertas():
 
 def getProductoSinOferta():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=RAYO\SQLEXPRESS;DATABASE=Ecommerce;UID=user;PWD=1234')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerProductoSinOferta")
         rows = cursor.fetchall()
@@ -144,7 +144,7 @@ def getProductoSinOferta():
 
 def getProductos(num):
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=RAYO\SQLEXPRESS;DATABASE=Ecommerce;UID=user;PWD=1234')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerProductosPaginados @PageNumber=?",  (num))
         rows = cursor.fetchall()
@@ -162,5 +162,38 @@ def getProductos(num):
         return lista
     except Exception as ex:
         print("Error durante la conexión: {}".format(ex))
+
     finally:
         connection.close()
+
+
+def getProductoDetalle(producto_id):
+    connection = None
+    try:
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=RAYO\SQLEXPRESS;DATABASE=Ecommerce;UID=user;PWD=1234')
+        cursor = connection.cursor()
+        cursor.execute("EXEC spLeerProductoPorId @idProducto = ?", producto_id)
+        row = cursor.fetchone()
+        if row:
+            return {
+                'id': row[0],
+                'Codigo': row[1],
+                'nombre': row[2],
+                'Categoria': row[3],
+                'Marca': row[4],
+                'precio': float(row[6]),
+                'Stock': row[7],
+                'popularidad': row[11],
+                'descripcion': row[12],
+                'imagen': row[13]
+            }
+        else:
+            return None
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+        return None
+ 
+
+    finally:
+        connection.close()
+getProductoDetalle(99)

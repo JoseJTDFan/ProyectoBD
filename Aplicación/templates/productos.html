@@ -11,8 +11,8 @@
         <h1>Super Doña Juanita</h1>
     </header>
 </div>
-<br>
 <body>
+    <br>
     <nav>
         <div class="nav-left">
             <label for="toggle-submenu">Filtros</label>
@@ -86,8 +86,9 @@
             <ul>
                 {% for producto in productos %}
                     <li>
-                        <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" width="100">
-                        <h4>{{ producto.nombre }}</h4>
+                        <a href="/producto_detalle/{{producto.id}}">
+                            <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" width="100">
+                        </a>                        <h4>{{ producto.nombre }}</h4>
                         {% if producto.tienedesc %}
                             <h5>
                                 <p>
