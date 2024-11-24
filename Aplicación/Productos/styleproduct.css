@@ -1,0 +1,150 @@
+body{
+    background-image: url("fondo2.png");
+    background-size: 1200px 800px;
+    font-family: Pixelify Sans Semibold, CeraPro, Times New Roman;
+}
+
+header{
+    background: brown;
+    border-radius: 8px;
+    height: 100px;
+    text-align: center;
+    line-height: 65px;
+    color: white;
+    border-top: 15px dashed white;
+    border-bottom: 15px dashed white;
+}
+
+#container{
+    width: 70%;
+    margin: 0px auto;
+}
+
+nav {
+    display: flex; /* Usar flexbox para dividir el espacio */
+    justify-content: space-between; /* Separar los elementos */
+    align-items: center; /* Alinear verticalmente */
+    background-color: brown; /* Fondo azul */
+    padding: 10px 20px; /* Espaciado interno */
+    color: white; /* Color del texto */
+    position: relative;
+}
+
+/* Estilo para las secciones del nav */
+.nav-left,
+.nav-right {
+    display: flex; /* Para manejar múltiples elementos dentro */
+    align-items: center; /* Alinea los elementos verticalmente */
+}
+
+/* Opcional: estilo para los enlaces */
+a {
+    text-decoration: none; /* Sin subrayado */
+    color: white; /* Color del texto */
+    margin: 0 10px; /* Espaciado entre enlaces */
+}
+
+a:hover {
+    text-decoration: underline; /* Subrayar al pasar el cursor */
+}
+
+/* Estilo para los enlaces principales */
+a {
+    text-decoration: none;
+    color: white;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    background: #FEF9D9;
+    color: black;
+    border: 2px solid #FF7055;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 300px;
+}
+
+/* Mostrar el submenú cuando el checkbox está seleccionado */
+#toggle-submenu:checked + .submenu {
+    display: block;
+}
+
+.submenu .close-btn {
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.submenu .close-btn label {
+    cursor: pointer;
+    color: red;
+    font-weight: bold;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.botones {
+    font-family: Pixelify Sans Semibold, CeraPro, Times New Roman;
+    background-color:brown; /* Color verde */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    transition: transform 0.2s ease, background-color 0.3s ease; /* Animación */
+}
+
+.botones:hover {
+    background-color:#D38348; /* Color más oscuro al pasar el mouse */
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+}
+
+.botones:active {
+    background-color: #571200; /* Color más oscuro al hacer clic */
+    transform: scale(0.95); /* Reduce ligeramente el tamaño */
+}
+
+.popularidad-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.popularidad-container span {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+nav ul li{
+    float:left;
+    list-style: none;
+    margin: 10px;
+    line-height: 30px;
+}
+#ofertas{
+    float:left;
+    width: 100%
+}
+
+#ofertas ul li{
+    float:left;
+    list-style: none;
+    margin: 10px;
+    
+}

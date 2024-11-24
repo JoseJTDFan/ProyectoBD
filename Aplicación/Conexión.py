@@ -68,3 +68,99 @@ def validarUsuario(correo,contrasena):
         print("Error durante la conexión: {}".format(ex))
     finally:
         connection.close()
+
+def getNombresCategorias():
+    try:
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        cursor = connection.cursor()
+        cursor.execute("EXEC ObtenerCategorias")
+        rows = cursor.fetchall()
+        lista=[]
+        for row in rows:
+           print(row[0])
+           lista.append(row[0])
+        return lista
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        connection.close()
+
+def getNombresMarcas():
+    try:
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        cursor = connection.cursor()
+        cursor.execute("EXEC ObtenerMarcas")
+        rows = cursor.fetchall()
+        lista=[]
+        for row in rows:
+           print(row[0])
+           lista.append(row[0])
+        return lista
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        connection.close()
+
+def getOfertas():
+    try:
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        cursor = connection.cursor()
+        cursor.execute("EXEC ObtenerOfertas")
+        rows = cursor.fetchall()
+        lista=[]
+        for row in rows:
+            lista.append({
+                'id': row[0],
+                'nombre': row[1],
+                'precio': float(row[2]),  # Convertir Decimal a float
+                'descuento': float(row[3]),  # Convertir Decimal a float
+                'imagen': row[4]
+            })
+        return lista
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        connection.close()
+
+def getProductoSinOferta():
+    try:
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        cursor = connection.cursor()
+        cursor.execute("EXEC ObtenerProductoSinOferta")
+        rows = cursor.fetchall()
+        lista=[]
+        for row in rows:
+            lista.append({
+                'id': row[0],
+                'nombre': row[1],
+                'precio': float(row[2]),  # Convertir Decimal a float
+                'imagen': row[3]
+            })
+        return lista
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        connection.close()
+
+def getProductos(num):
+    try:
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        cursor = connection.cursor()
+        cursor.execute("EXEC ObtenerProductosPaginados @PageNumber=?",  (num))
+        rows = cursor.fetchall()
+        lista=[]
+        for row in rows:
+            lista.append({
+                'id': row[0],
+                'nombre': row[1],
+                'precio': float(row[2]),  # Convertir Decimal a float
+                'descuento': float(row[3]),  # Convertir Decimal a float
+                'imagen': row[4],
+                'tienedesc': row[5]
+            })
+            print(row)
+        return lista
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        connection.close()
