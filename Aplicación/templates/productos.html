@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Doña Juanita</title>
+    <link rel="stylesheet" href="Productos/styleproduct.css"/>
+</head>
+<div id = "container">
+    <header>
+        <h1>Super Doña Juanita</h1>
+    </header>
+</div>
+<br>
+<body>
+    <nav>
+        <div class="nav-left">
+            <label for="toggle-submenu">Filtros</label>
+            <input type="checkbox" id="toggle-submenu" style="display: none;">
+            <div class="submenu" id="submenu-filtros">
+                <!-- Botón de cerrar -->
+                <div class="close-btn">
+                    <label for="toggle-submenu">X</label>
+                </div>
+
+                <!-- Filtro por precio -->
+                <div class="form-group">
+                    <label for="precio-min">Precio Mínimo:</label>
+                    <input type="number" id="precio-min" placeholder="Mínimo">
+                </div>
+                <div class="form-group">
+                    <label for="precio-max">Precio Máximo:</label>
+                    <input type="number" id="precio-max" placeholder="Máximo">
+                </div>
+
+                <!-- Filtro por categoría -->
+                <div class="form-group">
+                    <label for="categoria">Categoría:</label>
+                    <select id="categoria" name="categoria">
+                        <option value="">Seleccionar categoría</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ loop.index }}">{{ categoria }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Filtro por marca -->
+                <div class="form-group">
+                    <label for="marca">Marca:</label>
+                    <select id="marca" name="marca">
+                        <option value="">Seleccionar marca</option>
+                        {% for marca in marcas %}
+                            <option value="{{ loop.index }}">{{ marca }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Filtro por popularidad -->
+                <label for="popularidad">Popularidad:</label>
+                <div class="popularidad-container">
+                    <input type="range" id="popularidad" min="1" max="10" value="5" oninput="actualizarValorPopularidad()">
+                    <span id="popularidad-valor">5</span>
+                </div>
+
+                <!-- Botón para aplicar filtros -->
+                <button class="botones" type="submit">Aplicar Filtros</button>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <a href="#">Ver carrito</a>
+            <a href="#">{{usuario[1]}} {{usuario[2]}}</a>
+            <img src="Productos/user.png" width="30">
+        </div>
+    </nav>
+
+    <script>
+        function actualizarValorPopularidad() {
+            const valor = document.getElementById('popularidad').value;
+            document.getElementById('popularidad-valor').innerText = valor;
+        }
+    </script>
+
+    <section id="ofertas">
+        <article class="ofertas">
+            <ul>
+                {% for producto in productos %}
+                    <li>
+                        <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" width="100">
+                        <h4>{{ producto.nombre }}</h4>
+                        {% if producto.tienedesc %}
+                            <h5>
+                                <p>
+                                    <del>₡{{ producto.precio }}</del>  ₡{{ producto.descuento }}
+                                </p>
+                            </h5>
+                        {% else %}
+                            <h5>
+                                <p>₡{{ producto.precio }}</p>
+                            </h5>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </article>
+
+    </section>
+</body>
+
+</html>

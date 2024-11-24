@@ -17,8 +17,16 @@ def home():
 def inicio():
     correo = request.form.get('correo')
     contrasena= request.form.get('contraseña')
-    if  validarUsuario(correo,contrasena) != False:
-        return f"Acción 1 ejecutada con: {correo, contrasena}"
+    usuario =validarUsuario(correo,contrasena)
+    if  usuario != False:
+        categorias = getNombresCategorias()
+        marcas = getNombresMarcas()
+        productos= getProductos(3)
+        return render_template('productos.html',
+                               usuario = usuario,
+                               categorias=categorias,
+                               marcas=marcas,
+                               productos=productos)
     else:
         categorias = getTop5Categorias()
         promociones = getPromocionesInicio()
