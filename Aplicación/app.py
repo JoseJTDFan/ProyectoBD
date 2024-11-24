@@ -79,7 +79,16 @@ def inicio():
 
 @app.route('/cliente/<int:id>')
 def cliente(id):
-    cliente = getUsuario(id)
+    cliente=[]
+    cliente.append(session["id"])
+    cliente.append(session["nombre"])
+    cliente.append(session["apellido"])
+    cliente.append(session["correo"])
+    cliente.append(session["contrasena"])
+    cliente.append(session["telefono"])
+    cliente.append(session["fecha"])
+    cliente.append(session["tipo"])
+    cliente.append(session["direccion"])
     return render_template('cliente.html', cliente=cliente)
 
 # Ruta para los detalles de un producto
@@ -87,6 +96,20 @@ def cliente(id):
 def producto_detalle(producto_id):
     producto = getProductoDetalle(producto_id)
     return render_template('producto_detalle.html', producto=producto)
+
+@app.route('/carrito/<int:id>')
+def carrito(id):
+    cliente=[]
+    cliente.append(session["id"])
+    cliente.append(session["nombre"])
+    cliente.append(session["apellido"])
+    cliente.append(session["correo"])
+    cliente.append(session["contrasena"])
+    cliente.append(session["telefono"])
+    cliente.append(session["fecha"])
+    cliente.append(session["tipo"])
+    cliente.append(session["direccion"])
+    return render_template('carrito.html', cliente=cliente)
 
 if __name__ == '__main__':
     app.run(debug=True)
