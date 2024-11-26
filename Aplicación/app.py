@@ -7,6 +7,7 @@ app.secret_key = "1234"
 # Ruta para la página principal
 @app.route('/')
 def home():
+    session.clear()
     categorias = getTop5Categorias()
     promociones = getPromocionesInicio()
     return render_template('index.html', 
@@ -102,7 +103,10 @@ def cliente(id):
     cliente.append(session["estado"])
     cliente.append(session["direccion"])
     print(cliente)
-    return render_template('cliente.html', cliente=cliente)
+    if (session["tipo"] == "cliente"):
+        return render_template('cliente.html', cliente=cliente, opcion=1)
+    else:
+        return render_template('cliente.html', cliente=cliente, opcion=2)
 
 # Ruta para los detalles de un producto
 @app.route('/producto_detalle/<int:producto_id>')
@@ -193,7 +197,6 @@ def actualizar_usuario():
             categorias=categorias,
             promociones=promociones
         )
-
     return redirect(url_for('cliente', id=id_cliente))
 @app.route('/exito', methods=['POST'])
 def exito():
@@ -210,12 +213,15 @@ def exito():
     direccion = request.form.get('direccion')
 
     if crearUsuario(nombre, apellido, correo, contrasena, telefono, tipo, direccion) == True:
-        return render_template(
-                    'index.html',
-                    mensaje2="Usuario registrado exitosamente",
-                    categorias=getTop5Categorias(),
-                    promociones=getPromocionesInicio()
-                )
+        if session.get("tipo") is None  or session["tipo"] == "cliente":
+            return render_template(
+                        'index.html',
+                        mensaje2="Usuario registrado exitosamente",
+                        categorias=getTop5Categorias(),
+                        promociones=getPromocionesInicio()
+                    )
+        else:
+             return redirect(url_for('usuarios'))
     else:
         return render_template('registro.html',
                                mensaje="Usuario no registrado")
@@ -253,6 +259,12 @@ def filtro():
     return render_template('filtros.html',
                                productos=productos,
                                usuario=usuario)
+
+@app.route('/usuarios')
+def usuarios():
+    usuarios = getUsuarios()
+    return render_template('usuarios.html',
+                           usuarios=usuarios)
 
 @app.route('/logout')
 def logout():

@@ -8,7 +8,7 @@
 </head>
 <body>
     <div id="container">
-        <button class="boton-enviar" onclick="window.location.href='/inicio';">Regresar</button>
+        <button class="boton-enviar" onclick="regresar(opcion)">Regresar</button>
         <header>
             <h2>Perfil</h2>
         </header>
@@ -43,6 +43,19 @@
                 </form>
             </div>
         </div>
+
+        <script>
+
+            function regresar(opcion) {
+                if (opcion === 1) {
+                    window.location.href = '/inicio';
+                } else if (opcion === 2) {
+                    window.location.href = '/usuarios';
+                } else {
+                    alert('Opción no válida');
+                }
+            }
+        </script>
     </div>
 </body>
 </html>

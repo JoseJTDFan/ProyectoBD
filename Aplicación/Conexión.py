@@ -80,47 +80,6 @@ def getNombresMarcas():
     finally:
         connection.close()
 
-def getOfertas():
-    try:
-        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
-        cursor = connection.cursor()
-        cursor.execute("EXEC ObtenerOfertas")
-        rows = cursor.fetchall()
-        lista=[]
-        for row in rows:
-            lista.append({
-                'id': row[0],
-                'nombre': row[1],
-                'precio': float(row[2]),  # Convertir Decimal a float
-                'descuento': float(row[3]),  # Convertir Decimal a float
-                'imagen': row[4]
-            })
-        return lista
-    except Exception as ex:
-        print("Error durante la conexión: {}".format(ex))
-    finally:
-        connection.close()
-
-def getProductoSinOferta():
-    try:
-        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
-        cursor = connection.cursor()
-        cursor.execute("EXEC ObtenerProductoSinOferta")
-        rows = cursor.fetchall()
-        lista=[]
-        for row in rows:
-            lista.append({
-                'id': row[0],
-                'nombre': row[1],
-                'precio': float(row[2]),  # Convertir Decimal a float
-                'imagen': row[3]
-            })
-        return lista
-    except Exception as ex:
-        print("Error durante la conexión: {}".format(ex))
-    finally:
-        connection.close()
-
 def getProductos(num):
     try:
         connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
@@ -317,3 +276,15 @@ def getProductosFiltrados(precio_min, precio_max, categoria, marca, calif_min, c
     finally:
         if 'connection' in locals() and connection:
             connection.close()
+
+def getUsuarios():
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("exec [dbo].[spLeerUsuarios]")
+        rows = cursor.fetchall()
+        return rows
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        connection.close()
