@@ -218,3 +218,32 @@ def getProductoDetalle(producto_id):
         return None
     finally:
         connection.close()
+
+def actualizarUsuario(
+    id_usuario, nombre, apellido, correo_electronico, contrasena, 
+    telefono, tipo_usuario, estado, direccion_envio
+):
+    connection = None
+    try:
+        # Connect to SQL Server
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        cursor = connection.cursor()
+
+        # Call the stored procedure
+        cursor.execute(
+            "EXEC spActualizarUsuario @id_usuario = ?, @nombre = ?, @apellido = ?, @correo_electronico = ?, "
+            "@contrasena = ?, @telefono = ?, @tipo_usuario = ?, @estado = ?, @direccion_envio = ?",
+            id_usuario, nombre, apellido, correo_electronico, contrasena,
+            telefono, tipo_usuario, estado, direccion_envio
+        )
+        
+        # Commit changes
+        connection.commit()
+
+        return {"success": True, "message": "User updated successfully"}
+    except Exception as ex:
+        print(f"Error during the operation: {ex}")
+        return {"success": False, "message": f"Error: {ex}"}
+    finally:
+        if connection:
+            connection.close()

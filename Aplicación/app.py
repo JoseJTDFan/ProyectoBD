@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for
 from Conexión import *
 
 app = Flask(__name__, static_folder='Productos')
@@ -30,7 +30,8 @@ def inicio():
             session["telefono"] = usuario[5]
             session["fecha"] = usuario[6]
             session["tipo"] = usuario[7]
-            session["direccion"] = usuario[8]
+            session["estado"] = usuario[8]
+            session["direccion"] = usuario[9]
         else:
             categorias = getTop5Categorias()
             promociones = getPromocionesInicio()
@@ -53,6 +54,7 @@ def inicio():
         usuario.append(session["telefono"])
         usuario.append(session["fecha"])
         usuario.append(session["tipo"])
+        usuario.append(session["estado"])
         usuario.append(session["direccion"])
 
     # Obtener datos necesarios para renderizar la página
@@ -93,6 +95,7 @@ def cliente(id):
     cliente.append(session["telefono"])
     cliente.append(session["fecha"])
     cliente.append(session["tipo"])
+    cliente.append(session["estado"])
     cliente.append(session["direccion"])
     return render_template('cliente.html', cliente=cliente)
 
@@ -115,6 +118,62 @@ def carrito(id):
     cliente.append(session["tipo"])
     cliente.append(session["direccion"])
     return render_template('carrito.html', cliente=cliente)
+
+@app.route('/actualizar_usuario', methods=['POST'])
+def actualizar_usuario():
+    # Catch form data
+    id_cliente = request.form.get('id_cliente')
+    nonbre = request.form.get('nombre')
+    apellido = request.form.get('apellido')
+    correo = request.form.get('correo')
+    contra = request.form.get('contra')
+    telefono = request.form.get('telefono')
+    tipo = request.form.get('tipo')
+    direccion = request.form.get('direccion')
+    estado = request.form.get('estado')
+    estado_value = 1 if estado == "True" else 0
+
+
+    # Perform the necessary actions with the data
+    # For example, update the database or perform validations
+    print(f"Cliente ID: {id_cliente}")
+    print(f"Nombre: {nonbre}")
+    print(f"Apellido: {apellido}")
+    print(f"Correo: {correo}")
+    print(f"Contraseña: {contra}")
+    print(f"Teléfono: {telefono}")
+    print(f"Tipo: {tipo}")
+    print(f"Estado: {estado_value}")
+    print(f"Dirección: {direccion}")
+
+    update = actualizarUsuario(
+        id_cliente, nonbre, apellido, correo, contra, telefono, tipo, estado_value, direccion
+    )
+
+    usuario = validarUsuario(correo, contra)
+    if usuario:
+        pagina = 1
+        session["id"] = usuario[0]
+        session["nombre"] = usuario[1]
+        session["apellido"] = usuario[2]
+        session["correo"] = usuario[3]
+        session["contrasena"] = usuario[4]
+        session["telefono"] = usuario[5]
+        session["fecha"] = usuario[6]
+        session["tipo"] = usuario[7]
+        session["estado"] = usuario[8]
+        session["direccion"] = usuario[9]
+    else:
+        categorias = getTop5Categorias()
+        promociones = getPromocionesInicio()
+        return render_template(
+            'index.html',
+            mensaje="Usuario no registrado o credenciales incorrectas.",
+            categorias=categorias,
+            promociones=promociones
+        )
+
+    return redirect(url_for('cliente', id=id_cliente))
 
 if __name__ == '__main__':
     app.run(debug=True)
