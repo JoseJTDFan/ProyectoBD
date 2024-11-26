@@ -6,20 +6,43 @@
     <title>Super Doña Juanita</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styleclient.css') }}">
 </head>
-<div id = "container">
-    <header>
-        <h1>Super Doña Juanita</h1>
-    </header>
-</div>
-
 <body>
-    <a href="/usuarios">
-        <img src="user.png" alt="Usuarios" width="100">
-    </a>                        <h4>Usuarios</h4>
-        <h5>
-            <p>
-                
-            </p>
-        </h5>
+    <div id="container">
+        <header>
+            <h1>Administrador</h1>
+        </header>
+        <div id="cards-container">
+            <div class="card">
+                <a href="/usuarios">
+                    <img src="Productos/user.png" alt="Usuarios" width="100">
+                </a>
+                <h4>Usuarios</h4>
+            </div>
+            <div class="card">
+                <a href="/brand">
+                    <img src="Productos/brand.png" alt="Marca" width="100">
+                </a>
+                <h4>Marcas</h4>
+            </div>
+            <div class="card">
+                <a href="/category">
+                    <img src="Productos/category.png" alt="Categoría" width="100">
+                </a>
+                <h4>Categorías</h4>
+            </div>
+            <div class="card">
+                <a href="/product">
+                    <img src="Productos/product.png" alt="Productos" width="100">
+                </a>
+                <h4>Productos</h4>
+            </div>
+            <div class="card">
+                <a href="/sale">
+                    <img src="Productos/sale.png" alt="Promociones y Ofertas" width="100">
+                </a>
+                <h4>Promociones y Ofertas</h4>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

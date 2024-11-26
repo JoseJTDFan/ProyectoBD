@@ -1,10 +1,17 @@
-body{
+/* Estilo general */
+body {
     background-image: url("fondo2.png");
     background-size: 1200px 800px;
     font-family: Pixelify Sans Semibold, CeraPro, Times New Roman;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
 }
 
-header{
+header {
     background: brown;
     border-radius: 8px;
     height: 100px;
@@ -13,9 +20,45 @@ header{
     color: white;
     border-top: 15px dashed white;
     border-bottom: 15px dashed white;
+    margin-bottom: 20px;
+    padding: 10px;
+    width: 100%;
 }
 
-#container{
-    width: 70%;
-    margin: 0px auto;
+#cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Estilos para las tarjetas */
+.card {
+    background-color: brown;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card img {
+    margin-bottom: 10px;
+}
+
+.card h4 {
+    margin: 10px 0 0 0;
+    font-size: 16px;
 }
