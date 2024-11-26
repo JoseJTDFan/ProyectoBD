@@ -115,6 +115,19 @@ def carrito(id):
     cliente.append(session["tipo"])
     cliente.append(session["direccion"])
     return render_template('carrito.html', cliente=cliente)
+# Ruta para la página de reportes
+@app.route('/reportes')
+def reportes():
+    usuario = {
+        "id": session.get("id"),
+        "nombre": session.get("nombre"),
+        "apellido": session.get("apellido"),
+        "correo": session.get("correo"),
+        "telefono": session.get("telefono"),
+        "fecha": session.get("fecha"),
+        "tipo": session.get("tipo")
+    }
+    return render_template('reportes.html', usuario=usuario)
 
 if __name__ == '__main__':
     app.run(debug=True)

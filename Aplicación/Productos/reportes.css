@@ -1,0 +1,69 @@
+body {
+    background-image: url("fondo2.png");
+    background-size: 1200px 800px;
+    font-family: Pixelify Sans Semibold, CeraPro, Times New Roman;
+}
+
+#container {
+    width: 70%;
+    margin: 0px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+header {
+    background: brown;
+    border-radius: 8px;
+    height: 100px;
+    text-align: center;
+    line-height: 65px;
+    color: white;
+    border-top: 15px dashed white;
+    border-bottom: 15px dashed white;
+}
+
+.reportes {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.reportes article {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.reportes h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.botones {
+    font-family: Pixelify Sans Semibold, CeraPro, Times New Roman;
+    background-color: brown;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    margin: 10px 0;
+}
+
+.botones:hover {
+    background-color: #D38348;
+    transform: scale(1.05);
+}
+
+.botones:active {
+    background-color: #571200;
+    transform: scale(0.95);
+}

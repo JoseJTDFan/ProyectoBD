@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes</title>
+    <link rel="stylesheet" href="../Productos/reportes.css"/>
+</head>
+<body>
+    <div id="container">
+        <header>
+            <h1>Generar Reportes</h1>
+        </header>
+        <nav>
+            <div class="nav-right">
+                <a href="/carrito/{{ usuario.id }}">Ver carrito</a>
+                <a href="/cliente/{{ usuario.id }}"> {{ usuario.nombre }} {{ usuario.apellido }}</a>
+            </div>
+        </nav>
+        <section class="reportes">
+            <article>
+                <h2>Generar Reportes en PDF o Excel</h2>
+                <button class="botones">Generar Reporte de Pedidos</button>
+                <button class="botones">Generar Reporte de Inventario</button>
+            </article>
+            <article>
+                <h2>Consultas</h2>
+                <button class="botones">Top 5 Clientes</button>
+                <button class="botones">Ventas por Cliente</button>
+                <button class="botones">Ventas por Marca</button>
+            </article>
+        </section>
+    </div>
+</body>
+</html>
