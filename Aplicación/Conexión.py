@@ -288,3 +288,35 @@ def getUsuarios():
         print("Error durante la conexión: {}".format(ex))
     finally:
         connection.close()
+
+def obtenerOCrearCarrito(id_usuario):
+    import pyodbc
+    try:
+        # Conexión a la base de datos
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+
+        # Ejecutar el procedimiento almacenado
+        cursor.execute("""
+            EXEC sp_RevisarOCrearCarrito @idUsuario = ?;
+        """, (id_usuario,))  # Usa una tupla incluso para un solo parámetro
+
+        # Obtener el resultado
+        result = cursor.fetchone()
+
+        # Verificar si hay un resultado
+        if result:
+            id_carrito = result[0]  # El idCarrito es el primer valor de la tupla
+            print(f"Carrito ID: {id_carrito}")
+            return id_carrito
+        else:
+            print("No se obtuvo un resultado del procedimiento almacenado.")
+            return None
+    except pyodbc.Error as ex:
+        print(f"Error durante la conexión o ejecución: {ex}")
+        return None
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+obtenerOCrearCarrito(1)
