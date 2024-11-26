@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect,url_for
 from Conexión import *
 
 app = Flask(__name__, static_folder='Productos')
@@ -20,6 +20,7 @@ def inicio():
         correo = request.form.get('correo')
         contrasena = request.form.get('contraseña')
         usuario = validarUsuario(correo, contrasena)
+        print(usuario)
         if usuario:
             pagina = 1
             session["id"] = usuario[0]
@@ -30,7 +31,8 @@ def inicio():
             session["telefono"] = usuario[5]
             session["fecha"] = usuario[6]
             session["tipo"] = usuario[7]
-            session["direccion"] = usuario[8]
+            session["estado"] = usuario[8]
+            session["direccion"] = usuario[9]
         else:
             categorias = getTop5Categorias()
             promociones = getPromocionesInicio()
@@ -53,6 +55,7 @@ def inicio():
         usuario.append(session["telefono"])
         usuario.append(session["fecha"])
         usuario.append(session["tipo"])
+        usuario.append(session["estado"])
         usuario.append(session["direccion"])
 
     # Obtener datos necesarios para renderizar la página
@@ -96,7 +99,9 @@ def cliente(id):
     cliente.append(session["telefono"])
     cliente.append(session["fecha"])
     cliente.append(session["tipo"])
+    cliente.append(session["estado"])
     cliente.append(session["direccion"])
+    print(cliente)
     return render_template('cliente.html', cliente=cliente)
 
 # Ruta para los detalles de un producto
@@ -144,7 +149,10 @@ def exito():
         return render_template('registro.html',
                                mensaje="Usuario no registrado")
 
-
+@app.route('/logout')
+def logout():
+    session.clear()  # Limpia la sesión
+    return redirect(url_for('home'))  # Redirige a la función 'home'
 
 if __name__ == '__main__':
     app.run(debug=True)

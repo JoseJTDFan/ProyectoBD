@@ -165,26 +165,24 @@ aside {
 
 .boton-carrito {
     font-family: Pixelify Sans Semibold, CeraPro, Times New Roman;
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #e74c3c;
-    color: #fff;
-    text-decoration: none;
+    background-color:brown; /* Color verde */
+    color: white;
     border: none;
     border-radius: 8px;
+    padding: 12px 24px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, background-color 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    transition: transform 0.2s ease, background-color 0.3s ease; /* Animación */
 }
 
 .boton-carrito:hover {
-    background-color: #c0392b;
-    transform: scale(1.05);
+    background-color:#D38348; /* Color más oscuro al pasar el mouse */
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño */
 }
 
 .boton-carrito:active {
-    background-color: #a93226;
-    transform: scale(0.95);
+    background-color: #571200; /* Color más oscuro al hacer clic */
+    transform: scale(0.95); /* Reduce ligeramente el tamaño */
 }

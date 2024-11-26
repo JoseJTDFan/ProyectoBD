@@ -219,7 +219,7 @@ def getProductoDetalle(producto_id):
     finally:
         connection.close()
 
-def crearUsuario(nombre, apellido, correo_electronico, contrasena, telefono, tipo, direccion):
+def crearUsuario(nombre, apellido, correo, contrasena, telefono, tipo, direccion):
     try:
         # Conexión a la base de datos
         connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
@@ -235,7 +235,7 @@ def crearUsuario(nombre, apellido, correo_electronico, contrasena, telefono, tip
             @telefono = ?, 
             @tipo_usuario = ?, 
             @direccion_envio = ?
-        """, (nombre, apellido, correo_electronico, contrasena, telefono, tipo, direccion))
+        """, (nombre, apellido, correo, contrasena, telefono, tipo, direccion))
         
         # Confirmar los cambios
         connection.commit()
