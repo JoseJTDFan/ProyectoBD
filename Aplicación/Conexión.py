@@ -1,27 +1,13 @@
 import pyodbc
-    
 
-def prueba():
-    try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234;')
-        print("Conexión exitosa.")
-        cursor = connection.cursor()
-        cursor.execute("SELECT @@version;")
-        row = cursor.fetchone()
-        print("Versión del servidor de SQL Server: {}".format(row)) 
-        cursor.execute("SELECT * FROM Marcas")
-        rows = cursor.fetchall()
-        for row in rows:
-            print(row)
-    except Exception as ex:
-        print("Error durante la conexión: {}".format(ex))
-    finally:
-        connection.close()  # Se cerró la conexión a la BD.
-        print("La conexión ha finalizado.")
+SERVER_NAME = "WINDOWS-0GERP4M"
+DATABASE_NAME = "Ecommerce"
+USER = "user"
+PASSWORD = "1234"
 
 def getTop5Categorias():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerTop5Categorias")
         rows = cursor.fetchall()
@@ -36,7 +22,7 @@ def getTop5Categorias():
 
 def getPromocionesInicio():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerPromocionInicio")
         rows = cursor.fetchall()
@@ -57,7 +43,7 @@ def getPromocionesInicio():
 
 def validarUsuario(correo,contrasena):
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC ValidarUsuario @correo_electronico = ?, @contrasena = ?", correo, contrasena)
         result = cursor.fetchone()
@@ -72,7 +58,7 @@ def validarUsuario(correo,contrasena):
 
 def getNombresCategorias():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerCategorias")
         rows = cursor.fetchall()
@@ -87,7 +73,7 @@ def getNombresCategorias():
 
 def getNombresMarcas():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerMarcas")
         rows = cursor.fetchall()
@@ -102,7 +88,7 @@ def getNombresMarcas():
 
 def getOfertas():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerOfertas")
         rows = cursor.fetchall()
@@ -123,7 +109,7 @@ def getOfertas():
 
 def getProductoSinOferta():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerProductoSinOferta")
         rows = cursor.fetchall()
@@ -143,7 +129,7 @@ def getProductoSinOferta():
 
 def getProductos(num):
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerProductosPaginados @PageNumber=?",  (num))
         rows = cursor.fetchall()
@@ -166,7 +152,7 @@ def getProductos(num):
 
 def getUsuario(id):
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC spBuscarUsuario @id = ?", id)
         result = cursor.fetchone()
@@ -181,7 +167,7 @@ def getUsuario(id):
 
 def getTotalProductos():
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC obtenerTotalProductos")
         result = cursor.fetchone()
@@ -194,7 +180,7 @@ def getTotalProductos():
 def getProductoDetalle(producto_id):
     connection = None
     try:
-        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234')
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
         cursor.execute("EXEC spLeerProductoPorId @idProducto = ?", producto_id)
         row = cursor.fetchone()
@@ -227,7 +213,7 @@ def actualizarUsuario(
     try:
         # Connect to SQL Server
         connection = pyodbc.connect(
-            'DRIVER={SQL Server};SERVER=DESKTOP-67IMC3K\\SQLEXPRESS;DATABASE=Ecommerce;UID=user_test;PWD=1234'
+            'DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234'
         )
         cursor = connection.cursor()
 
@@ -248,4 +234,57 @@ def actualizarUsuario(
         return {"success": False, "message": f"Error: {ex}"}
     finally:
         if connection:
+            connection.close()
+
+def crearUsuario(nombre, apellido, correo_electronico, contrasena, telefono, tipo, direccion):
+    try:
+        # Conexión a la base de datos
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        
+        # Ejecución del procedimiento almacenado
+        cursor.execute("""
+            EXEC spCrearUsuario 
+            @nombre = ?, 
+            @apellido = ?, 
+            @correo_electronico = ?, 
+            @contrasena = ?, 
+            @telefono = ?, 
+            @tipo_usuario = ?, 
+            @direccion_envio = ?
+        """, (nombre, apellido, correo_electronico, contrasena, telefono, tipo, direccion))
+        
+        # Confirmar los cambios
+        connection.commit()
+        print("Usuario creado exitosamente.")
+        return True
+    except Exception as ex:
+        print("Error durante la ejecución: {}".format(ex))
+        return False
+    finally:
+        if 'connection' in locals() and connection:
+            connection.close()
+
+def getReseñasPorProducto(id_producto):
+    try:
+        # Conexión a la base de datos
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC spObtenerReseñasPorProducto ?", id_producto)
+        rows = cursor.fetchall()
+        reseñas = []
+        for row in rows:
+            reseñas.append({
+                'producto': row[0],
+                'usuario': row[1]+" "+row[2],
+                'calificacion': row[3],
+                'comentario': row[4],
+                'fecha_reseña': row[5]
+            })
+        return reseñas
+    except Exception as ex:
+        print(f"Error durante la conexión: {ex}")
+        return []
+    finally:
+        if 'connection' in locals():
             connection.close()

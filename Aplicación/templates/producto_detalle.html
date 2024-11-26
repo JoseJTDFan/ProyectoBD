@@ -21,13 +21,42 @@
                 <p class="precio">₡{{ producto.precio }}</p>
                 <p class="stock">Stock: {{ producto.Stock }}</p>
                 <p class="popularidad">Popularidad: {{ producto.popularidad }}</p>
+                <p class="categoria">Categoría: {{ producto.Categoria }}</p>
+                <p class="marca">Marca: {{ producto.Marca }}</p>
                 <p class="descripcion">{{ producto.descripcion }}</p>
                 <form action="/añadir_carrito" method="post">
                     <input type="hidden" name="producto_id" value="{{ producto.id }}">
                     <button type="submit" class="boton-carrito">Añadir al carrito</button>
+                    <label for="cantidad">        Cantidad:</label>
+                    <input type="number" class="inputs "id="telefono" name="telefono" required min="1" max="{{producto.Stock}}">
                 </form>
                 <!-- Botón para regresar utilizando JavaScript -->
             </div>
+        </div>
+        <div id="reseñas-container">
+            {% for reseña in reseñas %}
+            <div class="card-reseña">
+                <div class="card-header">
+                    <h4>{{ reseña.usuario }}</h4>
+                    <span class="fecha">{{ reseña.fecha_reseña }}</span>
+                </div>
+                <div class="card-body">
+                    <div class="calificacion">
+                        <span class="stars">
+                            {% for i in range(1, 6) %}
+                                {% if i <= reseña.calificacion %}
+                                    ★
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                        </span>
+                        <span class="calificacion-numero">({{ reseña.calificacion }})</span>
+                    </div>
+                    <p class="comentario">"{{ reseña.comentario }}"</p>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </body>

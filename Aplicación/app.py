@@ -108,7 +108,10 @@ def cliente(id):
 @app.route('/producto_detalle/<int:producto_id>')
 def producto_detalle(producto_id):
     producto = getProductoDetalle(producto_id)
-    return render_template('producto_detalle.html', producto=producto)
+    reseñas = getReseñasPorProducto(producto_id)
+    return render_template('producto_detalle.html',
+                            producto=producto,
+                            reseñas=reseñas)
 
 @app.route('/carrito/<int:id>')
 def carrito(id):
