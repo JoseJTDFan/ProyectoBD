@@ -49,6 +49,11 @@
                 <p class="error">{{ mensaje }}</p>
             </div>
             {% endif %}
+            {% if mensaje2 %}
+            <div class="register-container">
+                <p class="register">{{ mensaje2 }}</p>
+            </div>
+            {% endif %}
             <label for="correo">Correo:</label>
             <br>
             <input type="email" class="inputs" id="correo" name="correo" required>
@@ -59,6 +64,10 @@
             <br>
             <br>
             <button type="submit"  class="botones">Ingresar</button>
+        </form>
+        <br>
+        <form action="/registrarse" method="GET">
+            <button type="submit" class="botones">Registrarse</button>
         </form>
     </aside>
 </body>

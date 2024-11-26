@@ -3,16 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Doña Juanita</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styleclient.css') }}">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="../Productos/profile.css"/>
 </head>
-<div id = "container">
-    <header>
-        <h1>Super Doña Juanita</h1>
-    </header>
-</div>
-
 <body>
-    {{cliente[1]}}
+    <div id="container">
+        <header>
+            <h2>Perfil</h2>
+        </header>
+        <div class="perfil">
+            <div class="perfil-info">
+                <form action="/actualizar_usuario" method="post">
+                    <input type="hidden" name="id_cliente" value="{{ cliente[0] }}">
+                    <input type="hidden" name="tipo" value="{{ cliente[7] }}">
+                    <input type="hidden" name="estado" value="{{ cliente[8] }}">
+
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" value="{{ cliente[1] }}" required>
+                    
+                    <label for="apellido">Apellidos</label>
+                    <input type="text" id="apellido" name="apellido" value="{{ cliente[2] }}" required>
+                    
+                    <label for="correo">Correo</label>
+                    <input type="email" id="correo" name="correo" value="{{ cliente[3] }}" required>
+                    
+                    <label for="contra">Contraseña</label>
+                    <input type="password" id="contra" name="contra" value="{{ cliente[4] }}" required>
+                    
+                    <label for="telefono">Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" value="{{ cliente[5] }}" required>
+
+                    <label for="direccion">Dirección</label>
+                    <textarea id="direccion" name="direccion" required>{{ cliente[9] }}</textarea>
+                    
+                    <span class="span-boton">
+                        <button type="submit" class="boton-enviar">Actualizar</button>
+                    </span>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

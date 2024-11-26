@@ -8,6 +8,7 @@
 </head>
 <body>
     <div id="container">
+        <button class="boton-carrito" onclick="window.location.href='/inicio';">Regresar</button>
         <header>
             <h1>{{ producto.nombre }}</h1>
         </header>
@@ -25,6 +26,7 @@
                     <input type="hidden" name="producto_id" value="{{ producto.id }}">
                     <button type="submit" class="boton-carrito">Añadir al carrito</button>
                 </form>
+                <!-- Botón para regresar utilizando JavaScript -->
             </div>
         </div>
     </div>
