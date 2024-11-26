@@ -218,3 +218,32 @@ def getProductoDetalle(producto_id):
         return None
     finally:
         connection.close()
+
+def crearUsuario(nombre, apellido, correo_electronico, contrasena, telefono, tipo, direccion):
+    try:
+        # Conexión a la base de datos
+        connection = pyodbc.connect('DRIVER={SQL Server};SERVER=WINDOWS-0GERP4M;DATABASE=Ecommerce;UID=user;PWD=1234')
+        cursor = connection.cursor()
+        
+        # Ejecución del procedimiento almacenado
+        cursor.execute("""
+            EXEC spCrearUsuario 
+            @nombre = ?, 
+            @apellido = ?, 
+            @correo_electronico = ?, 
+            @contrasena = ?, 
+            @telefono = ?, 
+            @tipo_usuario = ?, 
+            @direccion_envio = ?
+        """, (nombre, apellido, correo_electronico, contrasena, telefono, tipo, direccion))
+        
+        # Confirmar los cambios
+        connection.commit()
+        print("Usuario creado exitosamente.")
+        return True
+    except Exception as ex:
+        print("Error durante la ejecución: {}".format(ex))
+        return False
+    finally:
+        if 'connection' in locals() and connection:
+            connection.close()

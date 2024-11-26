@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Doña Juanita</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleclient.css') }}">
+</head>
+<body>
+    <div id="container">
+        <header>
+            <h1>Registrarse</h1>
+        </header>
+        {% if mensaje %}
+            <div class="error-container">
+                <p class="error">{{ mensaje }}</p>
+            </div>
+        {% endif %}
+        <form action="/exito" method="POST" onsubmit="return validarFormulario();">
+            <label for="nombre">Nombre:</label>
+            <input type="text" class="inputs" id="nombre" name="nombre" required>
+            <br>
+            <label for="apellido">Apellidos:</label>
+            <input type="text" class="inputs" id="apellido" name="apellido" required>
+            <br>
+            <label for="correo">Correo:</label><br>
+            <input type="email" class="inputs" id="correo" name="correo" required>
+            <br>
+            <label for="contraseña">Contraseña:</label><br>
+            <input type="text" class="inputs "id="contraseña" name="contraseña" required>
+            <br>
+            <label for="telefono">Teléfono:</label><br>
+            <input type="number" class="inputs "id="telefono" name="telefono" required>
+            <br>
+            <label for="tipo">Tipo:</label><br>
+            <select id="tipo" name="tipo">
+                <option value="0">Seleccionar tipo</option>
+                <option value="1">Usuario</option>
+                <option value="2">Administrador</option>
+            </select>
+            <br>
+            <label for="direccion">Dirección:</label><br>
+            <input type="text" class="inputs "id="direccion" name="direccion" required>
+            <br>
+            <button type="submit"  class="botones">Registrar</button>
+        </form>
+
+        <script>
+            function validarFormulario() {
+                const tipo = document.getElementById("tipo").value;
+                if (tipo === "0") {
+                    alert("Por favor, selecciona un tipo válido (Usuario o Administrador).");
+                    return false; // Evita el envío del formulario
+                }
+                return true; // Permite el envío del formulario
+            }
+        </script>
+    </div>
+</body>
+</html>
