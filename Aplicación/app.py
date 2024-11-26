@@ -20,6 +20,7 @@ def inicio():
         correo = request.form.get('correo')
         contrasena = request.form.get('contraseña')
         usuario = validarUsuario(correo, contrasena)
+        print(usuario)
         if usuario:
             pagina = 1
             session["id"] = usuario[0]
@@ -83,6 +84,9 @@ def inicio():
             hay_siguiente=hay_siguiente,
             hay_anterior=hay_anterior
         )
+@app.route('/registrarse')
+def registro():
+    return render_template('registro.html')
 
 @app.route('/cliente/<int:id>')
 def cliente(id):
@@ -97,6 +101,7 @@ def cliente(id):
     cliente.append(session["tipo"])
     cliente.append(session["estado"])
     cliente.append(session["direccion"])
+    print(cliente)
     return render_template('cliente.html', cliente=cliente)
 
 # Ruta para los detalles de un producto
@@ -174,6 +179,35 @@ def actualizar_usuario():
         )
 
     return redirect(url_for('cliente', id=id_cliente))
+@app.route('/exito', methods=['POST'])
+def exito():
+    nombre = request.form.get('nombre')
+    apellido = request.form.get('apellido')
+    correo = request.form.get('correo')
+    contrasena = request.form.get('contraseña')
+    telefono = request.form.get('telefono')
+    tipo = request.form.get('tipo')
+    if request.form.get('tipo') == "1":
+        tipo = 'cliente'
+    else:
+        tipo = 'admin'
+    direccion = request.form.get('direccion')
+
+    if crearUsuario(nombre, apellido, correo, contrasena, telefono, tipo, direccion) == True:
+        return render_template(
+                    'index.html',
+                    mensaje2="Usuario registrado exitosamente",
+                    categorias=getTop5Categorias(),
+                    promociones=getPromocionesInicio()
+                )
+    else:
+        return render_template('registro.html',
+                               mensaje="Usuario no registrado")
+
+@app.route('/logout')
+def logout():
+    session.clear()  # Limpia la sesión
+    return redirect(url_for('home'))  # Redirige a la función 'home'
 
 if __name__ == '__main__':
     app.run(debug=True)

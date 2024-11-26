@@ -97,6 +97,22 @@ aside{
     font-size: 12px;
 }
 
+.register-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid green;
+    background-color: #a8debee1; /* Rojo claro */
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Estilo para el texto del mensaje */
+.register {
+    color: solid green; /* Rojo intenso */
+    font-weight: bold;
+    font-size: 12px;
+}
+
 .inputs {
     width: 100%; /* Que ocupe todo el ancho disponible */
     padding: 10px; /* Espaciado interno */

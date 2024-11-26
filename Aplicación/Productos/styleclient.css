@@ -1,10 +1,17 @@
-body{
+/* Estilo general */
+body {
     background-image: url("fondo2.png");
     background-size: 1200px 800px;
     font-family: Pixelify Sans Semibold, CeraPro, Times New Roman;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
 }
 
-header{
+header {
     background: brown;
     border-radius: 8px;
     height: 100px;
@@ -13,9 +20,104 @@ header{
     color: white;
     border-top: 15px dashed white;
     border-bottom: 15px dashed white;
+    margin-bottom: 20px;
+    padding: 10px;
+    width: 100%;
 }
 
-#container{
-    width: 70%;
-    margin: 0px auto;
+#cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Estilos para las tarjetas */
+.card {
+    background-color: brown;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card img {
+    margin-bottom: 10px;
+}
+
+.card h4 {
+    margin: 10px 0 0 0;
+    font-size: 16px;
+}
+
+.inputs {
+    width: 100%; /* Que ocupe todo el ancho disponible */
+    padding: 10px; /* Espaciado interno */
+    margin: 10px 0; /* Espaciado entre los campos */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 5px; /* Bordes redondeados */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Efecto de profundidad */
+    font-size: 16px; /* Tamaño de texto */
+    background-color: #f9f9f9; /* Fondo gris claro */
+}
+
+/* Efecto al hacer foco en el input */
+.inputs:focus {
+    outline: none; /* Quitar el borde azul por defecto */
+    border: 1px solid #007bff; /* Borde azul */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Resplandor azul */
+    background-color: #ffffff; /* Fondo blanco */
+}
+
+.botones {
+    font-family: Pixelify Sans Semibold, CeraPro, Times New Roman;
+    background-color:brown; /* Color verde */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    transition: transform 0.2s ease, background-color 0.3s ease; /* Animación */
+}
+
+.botones:hover {
+    background-color:#D38348; /* Color más oscuro al pasar el mouse */
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+}
+
+.botones:active {
+    background-color: #571200; /* Color más oscuro al hacer clic */
+    transform: scale(0.95); /* Reduce ligeramente el tamaño */
+}
+
+.error-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid red;
+    background-color: #ffe6e6; /* Rojo claro */
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Estilo para el texto del mensaje */
+.error {
+    color: #ff0000; /* Rojo intenso */
+    font-weight: bold;
+    font-size: 12px;
 }
