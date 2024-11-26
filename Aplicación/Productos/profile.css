@@ -184,7 +184,7 @@ form textarea {
     font-family: Pixelify Sans Semibold, CeraPro, Times New Roman;
     display: inline-block;
     padding: 12px 24px;
-    background-color: #e74c3c;
+    background-color: brown;
     color: #fff;
     text-decoration: none;
     border: none;
@@ -197,11 +197,11 @@ form textarea {
 }
 
 .boton-enviar:hover {
-    background-color: #c0392b;
+    background-color: #D38348;
     transform: scale(1.05);
 }
 
 .boton-enviar:active {
-    background-color: #a93226;
+    background-color: #571200;
     transform: scale(0.95);
 }
