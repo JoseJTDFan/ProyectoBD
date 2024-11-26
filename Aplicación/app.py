@@ -66,16 +66,21 @@ def inicio():
     hay_siguiente = (pagina * elementos_por_pagina) < total_productos
     hay_anterior = pagina > 1
 
-    return render_template(
-        'productos.html',
-        usuario=usuario,
-        categorias=categorias,
-        marcas=marcas,
-        productos=productos,
-        pagina_actual=pagina,
-        hay_siguiente=hay_siguiente,
-        hay_anterior=hay_anterior
-    )
+    if session["tipo"] == 'admin':
+        return render_template(
+            'admin.html',
+            usuario=usuario)
+    else:
+        return render_template(
+            'productos.html',
+            usuario=usuario,
+            categorias=categorias,
+            marcas=marcas,
+            productos=productos,
+            pagina_actual=pagina,
+            hay_siguiente=hay_siguiente,
+            hay_anterior=hay_anterior
+        )
 
 @app.route('/cliente/<int:id>')
 def cliente(id):
