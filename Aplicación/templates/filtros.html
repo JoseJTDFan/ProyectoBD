@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Doña Juanita</title>
+    <link rel="stylesheet" href="Productos/styleproduct.css"/>
+</head>
+<div id = "container">
+    <header>
+        <h1>Super Doña Juanita</h1>
+    </header>
+</div>
+<body>
+    <br>
+    <nav>
+        <div class="nav-left">
+            <button class="botones" onclick="window.location.href='/inicio';">Regresar</button>
+        </div>
+
+        <div class="nav-right">
+            <a href="/carrito/{{ usuario[0] }}">Ver carrito</a>
+            <a href="/cliente/{{ usuario[0] }}"> {{ usuario[1] }} {{ usuario[2] }}</a>
+            <img src="Productos/user.png" width="30">
+            <a href="/logout"> Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <section id="ofertas">
+        <article class="ofertas">
+            <ul>
+                {% if productos %}
+                    {% for producto in productos %}
+                        <li>
+                            <a href="/producto_detalle/{{producto.id}}">
+                                <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}" width="100">
+                            </a>                        <h4>{{ producto.nombre }}</h4>
+                            {% if producto.tienedesc %}
+                                <h5>
+                                    <p>
+                                        <del>₡{{ producto.precio }}</del>  ₡{{ producto.descuento }}
+                                    </p>
+                                </h5>
+                            {% else %}
+                                <h5>
+                                    <p>₡{{ producto.precio }}</p>
+                                </h5>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </article>
+
+    </section>
+</body>
+
+</html>

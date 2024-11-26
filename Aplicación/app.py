@@ -219,6 +219,40 @@ def exito():
     else:
         return render_template('registro.html',
                                mensaje="Usuario no registrado")
+    
+@app.route('/filtrado', methods=['GET'])
+def filtro():
+    # Obtener los valores de los filtros desde los argumentos de la URL
+    precio_min = request.args.get('precio_min') 
+    precio_max = request.args.get('precio_max')
+    categoria = request.args.get('categoria')   
+    marca = request.args.get('marca')        
+    calif_min = request.args.get('calif_min') 
+    calif_max = request.args.get('calif_max') 
+
+    precio_min = int(precio_min) if precio_min else None
+    precio_max = int(precio_max) if precio_max else None
+    calif_min = int(calif_min) if calif_min else None
+    calif_max = int(calif_max) if calif_max else None
+    categoria = int(categoria) if categoria else None
+    marca = int(marca) if marca else None  
+
+    productos = getProductosFiltrados(precio_min, precio_max, categoria, marca, calif_min, calif_max)
+    print(productos)
+    usuario = []
+    usuario.append(session["id"])
+    usuario.append(session["nombre"])
+    usuario.append(session["apellido"])
+    usuario.append(session["correo"])
+    usuario.append(session["contrasena"])
+    usuario.append(session["telefono"])
+    usuario.append(session["fecha"])
+    usuario.append(session["tipo"])
+    usuario.append(session["estado"])
+    usuario.append(session["direccion"])
+    return render_template('filtros.html',
+                               productos=productos,
+                               usuario=usuario)
 
 @app.route('/logout')
 def logout():

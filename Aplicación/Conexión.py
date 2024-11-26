@@ -62,10 +62,7 @@ def getNombresCategorias():
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerCategorias")
         rows = cursor.fetchall()
-        lista=[]
-        for row in rows:
-           lista.append(row[0])
-        return lista
+        return rows
     except Exception as ex:
         print("Error durante la conexión: {}".format(ex))
     finally:
@@ -77,10 +74,7 @@ def getNombresMarcas():
         cursor = connection.cursor()
         cursor.execute("EXEC ObtenerMarcas")
         rows = cursor.fetchall()
-        lista=[]
-        for row in rows:
-           lista.append(row[0])
-        return lista
+        return rows
     except Exception as ex:
         print("Error durante la conexión: {}".format(ex))
     finally:
@@ -287,4 +281,39 @@ def getReseñasPorProducto(id_producto):
         return []
     finally:
         if 'connection' in locals():
+            connection.close()
+
+def getProductosFiltrados(precio_min, precio_max, categoria, marca, calif_min, calif_max):
+    try:
+        # Conexión a la base de datos
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        
+        # Ejecución del procedimiento almacenado
+        cursor.execute("""
+            EXEC [dbo].[ObtenerProductosFiltrados] 
+            @PrecioMin = ?, 
+            @PrecioMax = ?, 
+            @IdCategoria = ?, 
+            @IdMarca = ?, 
+            @CalifMin = ?, 
+            @CalifMax = ?;
+        """, (precio_min, precio_max, categoria, marca, calif_min, calif_max))
+        
+        rows = cursor.fetchall()
+        lista=[]
+        for row in rows:
+            lista.append({
+                'id': row[0],
+                'nombre': row[1],
+                'precio': float(row[2]),  # Convertir Decimal a float
+                'descuento': float(row[3]),  # Convertir Decimal a float
+                'imagen': row[4],
+                'tienedesc': row[5]
+            })
+        return lista
+    except Exception as ex:
+        print("Error durante la ejecución: {}".format(ex))
+    finally:
+        if 'connection' in locals() and connection:
             connection.close()

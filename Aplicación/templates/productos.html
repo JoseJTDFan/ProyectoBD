@@ -22,53 +22,54 @@
                 <div class="close-btn">
                     <label for="toggle-submenu">X</label>
                 </div>
-
-                <!-- Filtro por precio -->
-                <div class="form-group">
-                    <label for="precio-min">Precio Mínimo:</label>
-                    <input type="number" id="precio-min" placeholder="Mínimo" min="0">
-                </div>
-                <div class="form-group">
-                    <label for="precio-max">Precio Máximo:</label>
-                    <input type="number" id="precio-max" placeholder="Máximo"  min="0">
-                </div>
-
-                <!-- Filtro por categoría -->
-                <div class="form-group">
-                    <label for="categoria">Categoría:</label>
-                    <select id="categoria" name="categoria">
-                        <option value="">Seleccionar categoría</option>
-                        {% for categoria in categorias %}
-                            <option value="{{ loop.index }}">{{ categoria }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <!-- Filtro por marca -->
-                <div class="form-group">
-                    <label for="marca">Marca:</label>
-                    <select id="marca" name="marca">
-                        <option value="">Seleccionar marca</option>
-                        {% for marca in marcas %}
-                            <option value="{{ loop.index }}">{{ marca }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <!-- Filtro por popularidad -->
-                <!-- Filtro por precio -->
-                <div class="form-group">
-                    <label for="calif-min">Calificación Mínima:</label>
-                    <input type="number" id="calif-min" placeholder="Mínimo" min="0" max="5">
-                </div>
-                <div class="form-group">
-                    <label for="calif-max">Calificación Máxima:</label>
-                    <input type="number" id="calif-max" placeholder="Máximo" min="0" max="5">
-                </div>
-
-                <!-- Botón para aplicar filtros -->
-                <button class="botones" type="submit">Aplicar Filtros</button>
-            </div>
+            
+                <form action="/filtrado" method="GET" onsubmit="return validarFiltros();">
+                    <!-- Filtro por precio -->
+                    <div class="form-group">
+                        <label for="precio-min">Precio Mínimo:</label>
+                        <input type="number" id="precio-min" name="precio_min" placeholder="Mínimo" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="precio-max">Precio Máximo:</label>
+                        <input type="number" id="precio-max" name="precio_max" placeholder="Máximo" min="0">
+                    </div>
+            
+                    <!-- Filtro por categoría -->
+                    <div class="form-group">
+                        <label for="categoria">Categoría:</label>
+                        <select id="categoria" name="categoria">
+                            <option value="">Seleccionar categoría</option>
+                            {% for categoria in categorias %}
+                                <option value="{{ categoria[1] }}">{{ categoria[0] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+            
+                    <!-- Filtro por marca -->
+                    <div class="form-group">
+                        <label for="marca">Marca:</label>
+                        <select id="marca" name="marca">
+                            <option value="">Seleccionar marca</option>
+                            {% for marca in marcas %}
+                                <option value="{{ marca[1] }}">{{ marca[0]}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+            
+                    <!-- Filtro por calificación -->
+                    <div class="form-group">
+                        <label for="calif-min">Calificación Mínima:</label>
+                        <input type="number" id="calif-min" name="calif_min" placeholder="Mínimo" min="0" max="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="calif-max">Calificación Máxima:</label>
+                        <input type="number" id="calif-max" name="calif_max" placeholder="Máximo" min="0" max="5">
+                    </div>
+            
+                    <!-- Botón para aplicar filtros -->
+                    <button class="botones" type="submit">Aplicar Filtros</button>
+                </form>
+            </div>            
         </div>
 
         <div class="nav-right">
@@ -79,6 +80,28 @@
             <a href="/logout"> Cerrar Sesión</a>
         </div>
         
+        <script>
+            function validarFiltros() {
+                const precioMin = parseFloat(document.getElementById('precio-min').value) || 0;
+                const precioMax = document.getElementById('precio-max').value ? parseFloat(document.getElementById('precio-max').value) : null;
+                const califMin = parseFloat(document.getElementById('calif-min').value) || 0;
+                const califMax = document.getElementById('calif-max').value ? parseFloat(document.getElementById('calif-max').value) : null;
+        
+                // Validar que precioMax no sea menor que precioMin
+                if (precioMax !== null && precioMax < precioMin) {
+                    alert("El precio máximo no puede ser menor que el precio mínimo.");
+                    return false;
+                }
+        
+                // Validar que califMax no sea menor que califMin
+                if (califMax !== null && califMax < califMin) {
+                    alert("La calificación máxima no puede ser menor que la calificación mínima.");
+                    return false;
+                }
+        
+                return true; // Permite el envío del formulario si todo está bien
+            }
+        </script>
     </nav>
 
     <section id="ofertas">
