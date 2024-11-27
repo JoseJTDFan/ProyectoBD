@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto</title>
+    <link rel="stylesheet" href="../Productos/styleproductos.css"/>
+</head>
+<body>
+    <div id="container">
+        <button class="botones" onclick="window.location.href='/productos';">Regresar</button>
+        <!-- Encabezado -->
+        <header>
+            <h1>Editar Producto</h1>
+        </header>
+
+        <!-- Formulario de Edición de Producto -->
+        <section id="editar-producto">
+            <form action="/editarProducto" method="post">
+                <input type="hidden" name="id" value="{{ id }}">
+                <div class="form-group">
+                    <label for="nombre">Nombre del Producto:</label>
+                    <input type="text" id="nombre" name="nombre" class="inputs" value="{{ nombre }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" class="inputs" required>{{ descripcion }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="precio">Precio:</label>
+                    <input type="number" id="precio" name="precio" class="inputs" step="0.01" value="{{ precio }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="stock">Stock:</label>
+                    <input type="number" id="stock" name="stock" class="inputs" value="{{ stock }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="idCategoria">Categoría:</label>
+                    <select id="idCategoria" name="idCategoria" class="inputs" required>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria[0] }}" {% if categoria[0] == idCategoria %}selected{% endif %}>{{ categoria[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="idMarca">Marca:</label>
+                    <select id="idMarca" name="idMarca" class="inputs" required>
+                        {% for marca in marcas %}
+                            <option value="{{ marca[0] }}" {% if marca[0] == idMarca %}selected{% endif %}>{{ marca[1] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="botones">Guardar Cambios</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Super Doña Juanita - Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

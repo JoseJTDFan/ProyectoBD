@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Marca</title>
+    <link rel="stylesheet" href="../Productos/stylemarcas.css"/>
+</head>
+<body>
+    <div id="container">
+        <button class="botones" onclick="window.location.href='/brands';">Regresar</button>
+        <!-- Encabezado -->
+        <header>
+            <h1>Editar Marca</h1>
+        </header>
+
+        <!-- Formulario de Edición de Marca -->
+        <section id="editar-marca">
+            <form action="/editarMarca" method="get">
+                <input type="hidden" name="id" value="{{ request.args.get('id') }}">
+                <div class="form-group">
+                    <label for="nombre">Nombre de la Marca:</label>
+                    <input type="text" id="nombre" name="nombre" class="inputs" value="{{ request.args.get('nombre') }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" class="inputs" required>{{ request.args.get('descripcion') }}</textarea>
+                </div>
+                <button type="submit" class="botones">Guardar Cambios</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Super Doña Juanita - Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

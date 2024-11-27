@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Doña Juanita</title>
-    <link rel="stylesheet" href="../Productos/styleusuarios.css"/>
+    <link rel="stylesheet" href="../Productos/stylemarcass.css"/>
 </head>
 <body>
     <div id="container">
@@ -14,41 +14,46 @@
             <h1>Super Doña Juanita</h1>
         </header>
 
-        <!-- Sección Perfil de Usuario -->
+        <!-- Sección Productos -->
         <section id="perfil-usuario">
-            <h2>Perfil de Usuario</h2>
+            <h2>Productos</h2>
 
             <!-- Buscador -->
             <div class="buscador">
-                <input type="text" class="inputs" placeholder="Buscar pedidos o información..." id="buscador">
+                <input type="text" class="inputs" placeholder="Buscar productos..." id="buscador">
                 <button class="botones" onclick="buscar()">Buscar</button>
-                <button class="botones agregar" onclick="window.location.href='/registrarse';">Agregar Perfil</button>
+                <button class="botones agregar" onclick="window.location.href='/registrarProducto';">Agregar Producto</button>
             </div>
         </section>
 
-        <!-- Nueva Sección Lista de Usuarios -->
-        <section id="lista-usuarios">
-            <h2>Lista de Usuarios</h2>
+        <!-- Nueva Sección Lista de Productos -->
+        <section id="lista-productos">
+            <h2>Lista de Productos</h2>
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
-                        <th>Email</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for usuario in usuarios %}
+                    {% for producto in productos %}
+                        {% if producto[5] == 1 %}
                         <tr>
-                            <td>{{ usuario[0] }}</td>
-                            <td>{{ usuario[1] }} {{ usuario[2] }}</td>
-                            <td>{{ usuario[3] }}</td>
+                            <td>{{ producto[0] }}</td>
+                            <td>{{ producto[2] }}</td>
+                            <td>{{ producto[11] }}</td>
+                            <td>{{ producto[6] }}</td>
+                            <td>{{ producto[7] }}</td>
                             <td>
-                                <button class="botones" onclick="window.location.href='/editarUsuario?id={{ usuario[0] }}&nombre={{ usuario[1] }}&apellido={{ usuario[2] }}&correo={{ usuario[3] }}&telefono={{ usuario[4] }}&direccion={{ usuario[5] }}';">Editar</button>
-                                <button class="botones eliminar" onclick="window.location.href='/eliminarUsuario?id={{ usuario[0] }}&nombre={{ usuario[1] }}';">Eliminar</button>
+                                <button class="botones eliminar" onclick="window.location.href='/eliminarProducto?id={{ producto[0] }}&nombre={{ producto[2] }}';">Eliminar</button>
                             </td>
                         </tr>
+                        {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
@@ -63,17 +68,16 @@
     <script>
         function buscar() {
             const valor = document.getElementById('buscador').value.toLowerCase().trim(); // Texto ingresado por el usuario
-            const filas = document.querySelectorAll('#lista-usuarios tbody tr'); // Filas de la tabla
+            const filas = document.querySelectorAll('#lista-productos tbody tr'); // Filas de la tabla
 
             // Recorrer las filas y verificar coincidencias
             filas.forEach(fila => {
                 const columnas = fila.querySelectorAll('td');
                 const id = columnas[0].textContent.toLowerCase(); // ID
                 const nombre = columnas[1].textContent.toLowerCase(); // Nombre
-                const email = columnas[2].textContent.toLowerCase(); // Email
 
                 // Comprobar si el valor está en alguna de las columnas
-                if (id.includes(valor) || nombre.includes(valor) || email.includes(valor)) {
+                if (id.includes(valor) || nombre.includes(valor)) {
                     fila.style.display = ''; // Mostrar la fila si coincide
                 } else {
                     fila.style.display = 'none'; // Ocultar la fila si no coincide

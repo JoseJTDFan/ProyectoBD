@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuario</title>
+    <link rel="stylesheet" href="../Productos/styleusuarios.css"/>
+</head>
+<body>
+    <div id="container">
+        <button class="botones" onclick="window.location.href='/usuarios';">Regresar</button>
+        <!-- Encabezado -->
+        <header>
+            <h1>Editar Usuario</h1>
+        </header>
+
+        <!-- Formulario de Edición de Usuario -->
+        <section id="editar-usuario">
+            <form action="/editarUsuario" method="post">
+                <input type="hidden" name="id" value="{{ id }}">
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" class="inputs" value="{{ nombre }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" id="apellido" name="apellido" class="inputs" value="{{ apellido }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico:</label>
+                    <input type="email" id="correo" name="correo" class="inputs" value="{{ correo }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="text" id="telefono" name="telefono" class="inputs" value="{{ telefono }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="direccion">Dirección:</label>
+                    <textarea id="direccion" name="direccion" class="inputs" required>{{ direccion }}</textarea>
+                </div>
+                <button type="submit" class="botones">Guardar Cambios</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Super Doña Juanita - Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

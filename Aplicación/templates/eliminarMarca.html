@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Marca</title>
+    <link rel="stylesheet" href="../Productos/stylemarcass.css"/>
+</head>
+<body>
+    <div id="container">
+        <button class="botones" onclick="window.location.href='/brands';">Regresar</button>
+        <!-- Encabezado -->
+        <header>
+            <h1>Eliminar Marca</h1>
+        </header>
+
+        <!-- Confirmación de Eliminación de Marca -->
+        <section id="eliminar-marca">
+            <form action="/eliminarMarca" method="get">
+                <input type="hidden" name="id" value="{{ request.args.get('id') }}">
+                <p>¿Estás seguro de que deseas eliminar la marca <strong>{{ request.args.get('nombre') }}</strong>?</p>
+                <button type="submit" class="botones eliminar">Eliminar</button>
+                <button type="button" class="botones" onclick="window.location.href='/brands';">Cancelar</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Super Doña Juanita - Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

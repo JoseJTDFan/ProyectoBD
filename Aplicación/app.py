@@ -330,6 +330,240 @@ def logout():
     session.clear()  # Limpia la sesión
     return redirect(url_for('home'))  # Redirige a la función 'home'
 
+# Ruta para la página de marcas
+@app.route('/brand')
+def brands():
+    marcas = getMarcas()
+    return render_template('marcas.html', marcas=marcas)
+
+# Ruta para registrar una nueva marca
+@app.route('/registrarMarca', methods=['GET', 'POST'])
+def registrar_marca():
+    if request.method == 'POST':
+        nombre = request.form.get('nombre')
+        descripcion = request.form.get('descripcion')
+        registrarMarca(nombre, descripcion)
+        return redirect(url_for('brands'))
+    return render_template('registrarMarca.html')
+
+
+@app.route('/editarMarca', methods=['GET'])
+def editar_marca():
+    idMarca = request.args.get('id')
+    nombre = request.args.get('nombre')
+    descripcion = request.args.get('descripcion')
+    if idMarca and nombre and descripcion:
+        actualizarMarca(idMarca, nombre, descripcion)
+        return redirect(url_for('brands'))
+    return render_template('editarMarca.html')
+
+# Ruta para eliminar una marca
+@app.route('/eliminarMarca', methods=['GET'])
+def eliminar_marca():
+    idMarca = request.args.get('id')
+    if idMarca:
+        eliminarMarca(idMarca)
+        return redirect(url_for('brands'))
+    return render_template('eliminarMarca.html')
+
+
+
+# Ruta para la página de categorías
+@app.route('/category')
+def category():
+    categorias = getCategorias()
+    return render_template('categorias.html', categorias=categorias)
+
+# Ruta para registrar una nueva categoría
+@app.route('/registrarCategoria', methods=['GET', 'POST'])
+def registrar_categoria():
+    if request.method == 'POST':
+        nombre = request.form.get('nombre')
+        descripcion = request.form.get('descripcion')
+        registrarCategoria(nombre, descripcion)
+        return redirect(url_for('category'))
+    return render_template('registrarCategoria.html')
+
+
+@app.route('/editarCategoria', methods=['GET', 'POST'])
+def editar_categoria():
+    if request.method == 'POST':
+        idCategoria = request.form.get('id')
+        nombre = request.form.get('nombre')
+        descripcion = request.form.get('descripcion')
+        actualizarCategoria(idCategoria, nombre, descripcion)
+        return redirect(url_for('category'))
+    else:
+        idCategoria = request.args.get('id')
+        nombre = request.args.get('nombre')
+        descripcion = request.args.get('descripcion')
+        if idCategoria and nombre and descripcion:
+            return render_template('editarCategoria.html', id=idCategoria, nombre=nombre, descripcion=descripcion)
+        return redirect(url_for('category'))
+
+# Ruta para eliminar una categoría
+@app.route('/eliminarCategoria', methods=['GET'])
+def eliminar_categoria():
+    idCategoria = request.args.get('id')
+    if idCategoria:
+        eliminarCategoria(idCategoria)
+        return redirect(url_for('category'))
+    return render_template('eliminarCategoria.html')
+
+
+@app.route('/editarUsuario', methods=['GET', 'POST'])
+def editar_usuario():
+    if request.method == 'POST':
+        idUsuario = request.form.get('id')
+        nombre = request.form.get('nombre')
+        apellido = request.form.get('apellido')
+        correo = request.form.get('correo')
+        telefono = request.form.get('telefono')
+        direccion = request.form.get('direccion')
+        if idUsuario and nombre and apellido and correo and telefono and direccion:
+            modificarUsuario(idUsuario, nombre, apellido, correo, telefono, direccion)
+            return redirect(url_for('usuarios'))
+    else:
+        idUsuario = request.args.get('id')
+        nombre = request.args.get('nombre')
+        apellido = request.args.get('apellido')
+        correo = request.args.get('correo')
+        telefono = request.args.get('telefono')
+        direccion = request.args.get('direccion')
+        if idUsuario and nombre and apellido and correo and telefono and direccion:
+            return render_template('editarUsuario.html', id=idUsuario, nombre=nombre, apellido=apellido, correo=correo, telefono=telefono, direccion=direccion)
+    return redirect(url_for('usuarios'))
+
+# Ruta para eliminar un usuario
+@app.route('/eliminarUsuario', methods=['GET'])
+def eliminar_usuario():
+    idUsuario = request.args.get('id')
+    if idUsuario:
+        eliminarUsuario(idUsuario)
+        return redirect(url_for('usuarios'))
+    return render_template('eliminarUsuario.html')
+
+
+
+
+    # Ruta para la página de productos
+@app.route('/product')
+def productos():
+    productos = getProductoss()
+    return render_template('productosAdmin.html', productos=productos)
+
+
+
+
+# Ruta para registrar un nuevo producto
+@app.route('/registrarProducto', methods=['GET', 'POST'])
+def registrar_producto():
+    if request.method == 'POST':
+        codigo_producto = request.form.get('codigo_producto')
+        nombre = request.form.get('nombre')
+        descripcion = request.form.get('descripcion')
+        precio = request.form.get('precio')
+        stock = request.form.get('stock')
+        idCategoria = request.form.get('idCategoria')
+        idMarca = request.form.get('idMarca')
+        registrarProducto(codigo_producto, nombre, descripcion, precio, stock, idCategoria, idMarca)
+        return redirect(url_for('productos'))
+    categorias = getCategorias()
+    marcas = getMarcas()
+    return render_template('registrarProducto.html', categorias=categorias, marcas=marcas)
+    
+# Ruta para editar un producto
+@app.route('/editarProducto', methods=['GET', 'POST'])
+def editar_producto():
+    if request.method == 'POST':
+        idProducto = request.form.get('id')
+        nombre = request.form.get('nombre')
+        descripcion = request.form.get('descripcion')
+        precio = request.form.get('precio')
+        stock = request.form.get('stock')
+        idCategoria = request.form.get('idCategoria')
+        idMarca = request.form.get('idMarca')
+        actualizarProducto(idProducto, nombre, descripcion, precio, stock, idCategoria, idMarca)
+        return redirect(url_for('productos'))
+    else:
+        idProducto = request.args.get('id')
+        nombre = request.args.get('nombre')
+        descripcion = request.args.get('descripcion')
+        precio = request.args.get('precio')
+        stock = request.args.get('stock')
+        idCategoria = request.args.get('idCategoria')
+        idMarca = request.args.get('idMarca')
+        categorias = getCategorias()
+        marcas = getMarcas()
+        if idProducto and nombre and descripcion and precio and stock and idCategoria and idMarca:
+            return render_template('editarProducto.html', id=idProducto, nombre=nombre, descripcion=descripcion, precio=precio, stock=stock, idCategoria=idCategoria, idMarca=idMarca, categorias=categorias, marcas=marcas)
+    return redirect(url_for('productos'))
+
+# Ruta para eliminar un producto
+@app.route('/eliminarProducto', methods=['GET'])
+def eliminar_producto():
+    idProducto = request.args.get('id')
+    if idProducto:
+        eliminarProducto(idProducto)
+        return redirect(url_for('productos'))
+    return render_template('eliminarProducto.html')
+
+
+
+
+# Ruta para la página de promociones y ofertas
+@app.route('/promociones')
+def promociones():
+    promociones = getPromociones()
+    return render_template('promociones.html', promociones=promociones)
+
+# Ruta para registrar una nueva promoción u oferta
+@app.route('/registrarPromocion', methods=['GET', 'POST'])
+def registrar_promocion():
+    if request.method == 'POST':
+        idProducto = request.form.get('idProducto')
+        tipo = request.form.get('tipo')
+        descuento = request.form.get('descuento')
+        fechaInicio = request.form.get('fechaInicio')
+        fechaFinal = request.form.get('fechaFinal')
+        registrarPromocion(idProducto, tipo, descuento, fechaInicio, fechaFinal)
+        return redirect(url_for('promociones'))
+    productos = getProductoss()
+    return render_template('registrarPromocion.html', productos=productos)
+
+# Ruta para editar una promoción u oferta
+@app.route('/editarPromocion', methods=['GET', 'POST'])
+def editar_promocion():
+    if request.method == 'POST':
+        idPromocion = request.form.get('id')
+        idProducto = request.form.get('idProducto')
+        tipo = request.form.get('tipo')
+        descuento = request.form.get('descuento')
+        fechaInicio = request.form.get('fechaInicio')
+        fechaFinal = request.form.get('fechaFinal')
+        actualizarPromocion(idPromocion, idProducto, tipo, descuento, fechaInicio, fechaFinal)
+        return redirect(url_for('promociones'))
+    else:
+        idPromocion = request.args.get('id')
+        idProducto = request.args.get('idProducto')
+        tipo = request.args.get('tipo')
+        descuento = request.args.get('descuento')
+        fechaInicio = request.args.get('fechaInicio')
+        fechaFinal = request.args.get('fechaFinal')
+        if idPromocion and idProducto and tipo and descuento and fechaInicio and fechaFinal:
+            return render_template('editarPromocion.html', id=idPromocion, idProducto=idProducto, tipo=tipo, descuento=descuento, fechaInicio=fechaInicio, fechaFinal=fechaFinal)
+    return redirect(url_for('promociones'))
+
+# Ruta para eliminar una promoción u oferta
+@app.route('/eliminarPromocion', methods=['GET'])
+def eliminar_promocion():
+    idPromocion = request.args.get('id')
+    if idPromocion:
+        eliminarPromocion(idPromocion)
+        return redirect(url_for('promociones'))
+    return render_template('eliminarPromocion.html')
+
+
 @app.route('/getproductos')
 def get_productos():
     return jsonify(getProductoseID())
