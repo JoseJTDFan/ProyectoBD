@@ -347,15 +347,22 @@ def registrar_marca():
     return render_template('registrarMarca.html')
 
 
-@app.route('/editarMarca', methods=['GET'])
+@app.route('/editarMarca', methods=['GET', 'POST'])
 def editar_marca():
-    idMarca = request.args.get('id')
-    nombre = request.args.get('nombre')
-    descripcion = request.args.get('descripcion')
-    if idMarca and nombre and descripcion:
-        actualizarMarca(idMarca, nombre, descripcion)
-        return redirect(url_for('brands'))
-    return render_template('editarMarca.html')
+    if request.method == 'POST':
+        idMarca = request.form.get('id')
+        nombre = request.form.get('nombre')
+        descripcion = request.form.get('descripcion')
+        if idMarca and nombre and descripcion:
+            actualizarMarca(idMarca, nombre, descripcion)
+            return redirect(url_for('brands'))
+    else:
+        idMarca = request.args.get('id')
+        nombre = request.args.get('nombre')
+        descripcion = request.args.get('descripcion')
+        if idMarca and nombre and descripcion:
+            return render_template('editarMarca.html', id=idMarca, nombre=nombre, descripcion=descripcion)
+    return redirect(url_for('brands'))
 
 # Ruta para eliminar una marca
 @app.route('/eliminarMarca', methods=['GET'])
