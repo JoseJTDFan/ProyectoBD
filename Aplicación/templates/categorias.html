@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Doña Juanita</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container">
+        <!-- Encabezado -->
+        <header>
+            <h1>Super Doña Juanita</h1>
+        </header>
+
+
+        <!-- Sección categorías -->
+        <section id="perfil-usuario">
+            <h2>Categorías</h2>
+
+            <!-- Buscador -->
+            <div class="buscador">
+                <input type="text" class="inputs" placeholder="Buscar pedidos o información..." id="buscador">
+                <button class="botones" onclick="buscar()">Buscar</button>
+                <button class="botones agregar" onclick="agregarPerfil()">Agregar Categoría</button>
+
+            </div>
+
+        </section>
+
+        <!-- Nueva Sección Lista de Usuarios -->
+        <section id="lista-usuarios">
+            <h2>Lista de Categorías</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Juan Pérez</td>
+                        <td>LALLALALALALALLALALALALALL</td>
+                        <td>
+                            <button class="botones" onclick="editarUsuario(1)">Editar</button>
+                            <button class="botones eliminar" onclick="eliminarUsuario(1)">Eliminar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>María López</td>
+                        <td>LALLALALALALALLALALALALALL</td>
+                        <td>
+                            <button class="botones" onclick="editarUsuario(2)">Editar</button>
+                            <button class="botones eliminar" onclick="eliminarUsuario(2)">Eliminar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Carlos García</td>
+                        <td>LALLALALALALALLALALALALALL</td>
+                        <td>
+                            <button class="botones" onclick="editarUsuario(3)">Editar</button>
+                            <button class="botones eliminar" onclick="eliminarUsuario(3)">Eliminar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Super Doña Juanita - Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        function buscar() {
+            const valor = document.getElementById('buscador').value;
+            alert(`Buscando: ${valor}`);
+        }
+
+        function editarUsuario(id) {
+            alert(`Editando usuario con ID: ${id}`);
+        }
+
+        function eliminarUsuario(id) {
+            const confirmar = confirm(`¿Estás seguro de eliminar el usuario con ID: ${id}?`);
+            if (confirmar) {
+                alert(`Usuario con ID ${id} eliminado.`);
+            }
+        }
+    </script>
+</body>
+</html>

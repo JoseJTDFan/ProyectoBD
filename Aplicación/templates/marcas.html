@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Doña Juanita</title>
+    <link rel="stylesheet" href="../Productos/stylemarcas.css"/>
+</head>
+<body>
+    <div id="container">
+        <button class="botones" onclick="window.location.href='/inicio';">Regresar</button>
+        <!-- Encabezado -->
+        <header>
+            <h1>Super Doña Juanita</h1>
+        </header>
+
+        <!-- Sección Marcas -->
+        <section id="perfil-usuario">
+            <h2>Marcas</h2>
+
+            <!-- Buscador -->
+            <div class="buscador">
+                <input type="text" class="inputs" placeholder="Buscar marcas..." id="buscador">
+                <button class="botones" onclick="buscar()">Buscar</button>
+                <button class="botones agregar" onclick="window.location.href='/registrarMarca';">Agregar Marca</button>
+
+            </div>
+        </section>
+
+        <!-- Nueva Sección Lista de Marcas -->
+        <section id="lista-marcas">
+            <h2>Lista de Marcas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Marca</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for marca in marcas %}
+                        <tr>
+                            <td>{{ marca[0] }}</td>
+                            <td>{{ marca[1] }}</td>
+                            <td>
+                                <button class="botones" onclick="window.location.href='/editarMarca?id={{ marca[0] }}&nombre={{ marca[1] }}&descripcion={{ marca[2] }}';">Editar</button>
+                                <button class="botones agregar" onclick="window.location.href='/EliminarMarca';">Eliminar Marca</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Super Doña Juanita - Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        function buscar() {
+            const valor = document.getElementById('buscador').value.toLowerCase().trim(); // Texto ingresado por el usuario
+            const filas = document.querySelectorAll('#lista-marcas tbody tr'); // Filas de la tabla
+
+            // Recorrer las filas y verificar coincidencias
+            filas.forEach(fila => {
+                const columnas = fila.querySelectorAll('td');
+                const id = columnas[0].textContent.toLowerCase(); // ID
+                const nombre = columnas[1].textContent.toLowerCase(); // Nombre
+
+                // Comprobar si el valor está en alguna de las columnas
+                if (id.includes(valor) || nombre.includes(valor)) {
+                    fila.style.display = ''; // Mostrar la fila si coincide
+                } else {
+                    fila.style.display = 'none'; // Ocultar la fila si no coincide
+                }
+            });
+        }
+    </script>
+</body>
+</html>

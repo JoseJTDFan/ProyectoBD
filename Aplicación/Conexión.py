@@ -1,6 +1,6 @@
 import pyodbc
 
-SERVER_NAME = "WINDOWS-0GERP4M"
+SERVER_NAME = "RAYO\SQLEXPRESS"
 DATABASE_NAME = "Ecommerce"
 USER = "user"
 PASSWORD = "1234"
@@ -218,6 +218,23 @@ def crearUsuario(nombre, apellido, correo_electronico, contrasena, telefono, tip
         if 'connection' in locals() and connection:
             connection.close()
 
+
+
+def registrarMarca(nombre, descripcion):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC spRegistrarMarca @nombre = ?, @descripcion = ?", nombre, descripcion)
+        connection.commit()
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+
+
+
 def getReseñasPorProducto(id_producto):
     try:
         # Conexión a la base de datos
@@ -277,6 +294,52 @@ def getProductosFiltrados(precio_min, precio_max, categoria, marca, calif_min, c
         if 'connection' in locals() and connection:
             connection.close()
 
+
+def getMarcas():
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC ObtenerMarcas")
+        result = cursor.fetchall()
+        return result
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+        return []
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+def getMarcaById(id):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("SELECT id, nombre, descripcion FROM Marcas WHERE id = ?", id)
+        row = cursor.fetchone()
+        if row:
+            return {
+                'id': row[0],
+                'nombre': row[1],
+                'descripcion': row[2]
+            }
+        return None
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+def actualizarMarca(idMarca, nombre, descripcion):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC spActualizarMarca @idMarca = ?, @nombre = ?, @descripcion = ?", idMarca, nombre, descripcion)
+        connection.commit()
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        if 'connection' in locals():
+            connection.close()
+            
 def getUsuarios():
     try:
         connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')

@@ -271,6 +271,32 @@ def logout():
     session.clear()  # Limpia la sesión
     return redirect(url_for('home'))  # Redirige a la función 'home'
 
+# Ruta para la página de marcas
+@app.route('/brand')
+def brands():
+    marcas = getMarcas()
+    return render_template('marcas.html', marcas=marcas)
+
+# Ruta para registrar una nueva marca
+@app.route('/registrarMarca', methods=['GET', 'POST'])
+def registrar_marca():
+    if request.method == 'POST':
+        nombre = request.form.get('nombre')
+        descripcion = request.form.get('descripcion')
+        registrarMarca(nombre, descripcion)
+        return redirect(url_for('brands'))
+    return render_template('registrarMarca.html')
+
+
+@app.route('/editarMarca', methods=['GET'])
+def editar_marca():
+    idMarca = request.args.get('id')
+    nombre = request.args.get('nombre')
+    descripcion = request.args.get('descripcion')
+    if idMarca and nombre and descripcion:
+        actualizarMarca(idMarca, nombre, descripcion)
+        return redirect(url_for('brands'))
+    return render_template('editarMarca.html')
 
 
 if __name__ == '__main__':
