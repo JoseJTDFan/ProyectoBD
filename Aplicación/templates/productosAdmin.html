@@ -4,70 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Super Doña Juanita</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../Productos/stylemarcass.css"/>
 </head>
 <body>
     <div id="container">
+        <button class="botones" onclick="window.location.href='/inicio';">Regresar</button>
         <!-- Encabezado -->
         <header>
             <h1>Super Doña Juanita</h1>
         </header>
 
-
-        <!-- Sección categorías -->
+        <!-- Sección Productos -->
         <section id="perfil-usuario">
             <h2>Productos</h2>
 
             <!-- Buscador -->
             <div class="buscador">
-                <input type="text" class="inputs" placeholder="Buscar pedidos o información..." id="buscador">
+                <input type="text" class="inputs" placeholder="Buscar productos..." id="buscador">
                 <button class="botones" onclick="buscar()">Buscar</button>
-                <button class="botones agregar" onclick="agregarPerfil()">Agregar Producto</button>
-
+                <button class="botones agregar" onclick="window.location.href='/registrarProducto';">Agregar Producto</button>
             </div>
-
         </section>
 
-        <!-- Nueva Sección Lista de Usuarios -->
-        <section id="lista-usuarios">
+        <!-- Nueva Sección Lista de Productos -->
+        <section id="lista-productos">
             <h2>Lista de Productos</h2>
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Producto</th>
+                        <th>Nombre</th>
                         <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Medias</td>
-                        <td>LALLALALALALALLALALALALALL</td>
-                        <td>
-                            <button class="botones" onclick="editarUsuario(1)">Editar</button>
-                            <button class="botones eliminar" onclick="eliminarUsuario(1)">Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Botas</td>
-                        <td>LALLALALALALALLALALALALALL</td>
-                        <td>
-                            <button class="botones" onclick="editarUsuario(2)">Editar</button>
-                            <button class="botones eliminar" onclick="eliminarUsuario(2)">Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Shampoo</td>
-                        <td>LALLALALALALALLALALALALALL</td>
-                        <td>
-                            <button class="botones" onclick="editarUsuario(3)">Editar</button>
-                            <button class="botones eliminar" onclick="eliminarUsuario(3)">Eliminar</button>
-                        </td>
-                    </tr>
+                    {% for producto in productos %}
+                        {% if producto[5] == 1 %}
+                        <tr>
+                            <td>{{ producto[0] }}</td>
+                            <td>{{ producto[2] }}</td>
+                            <td>{{ producto[11] }}</td>
+                            <td>{{ producto[6] }}</td>
+                            <td>{{ producto[7] }}</td>
+                            <td>
+                                <button class="botones eliminar" onclick="window.location.href='/eliminarProducto?id={{ producto[0] }}&nombre={{ producto[2] }}';">Eliminar</button>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
                 </tbody>
             </table>
         </section>
@@ -80,19 +67,22 @@
 
     <script>
         function buscar() {
-            const valor = document.getElementById('buscador').value;
-            alert(`Buscando: ${valor}`);
-        }
+            const valor = document.getElementById('buscador').value.toLowerCase().trim(); // Texto ingresado por el usuario
+            const filas = document.querySelectorAll('#lista-productos tbody tr'); // Filas de la tabla
 
-        function editarUsuario(id) {
-            alert(`Editando usuario con ID: ${id}`);
-        }
+            // Recorrer las filas y verificar coincidencias
+            filas.forEach(fila => {
+                const columnas = fila.querySelectorAll('td');
+                const id = columnas[0].textContent.toLowerCase(); // ID
+                const nombre = columnas[1].textContent.toLowerCase(); // Nombre
 
-        function eliminarUsuario(id) {
-            const confirmar = confirm(`¿Estás seguro de eliminar el usuario con ID: ${id}?`);
-            if (confirmar) {
-                alert(`Usuario con ID ${id} eliminado.`);
-            }
+                // Comprobar si el valor está en alguna de las columnas
+                if (id.includes(valor) || nombre.includes(valor)) {
+                    fila.style.display = ''; // Mostrar la fila si coincide
+                } else {
+                    fila.style.display = 'none'; // Ocultar la fila si no coincide
+                }
+            });
         }
     </script>
 </body>

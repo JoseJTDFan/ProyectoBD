@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Usuario</title>
+    <link rel="stylesheet" href="../Productos/styleusuarios.css"/>
+</head>
+<body>
+    <div id="container">
+        <button class="botones" onclick="window.location.href='/usuarios';">Regresar</button>
+        <!-- Encabezado -->
+        <header>
+            <h1>Eliminar Usuario</h1>
+        </header>
+
+        <!-- Confirmación de Eliminación de Usuario -->
+        <section id="eliminar-usuario">
+            <form action="/eliminarUsuario" method="get">
+                <input type="hidden" name="id" value="{{ request.args.get('id') }}">
+                <p>¿Estás seguro de que deseas eliminar al usuario <strong>{{ request.args.get('nombre') }}</strong>?</p>
+                <button type="submit" class="botones eliminar">Eliminar</button>
+                <button type="button" class="botones" onclick="window.location.href='/usuarios';">Cancelar</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Super Doña Juanita - Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

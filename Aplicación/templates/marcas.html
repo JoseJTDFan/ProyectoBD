@@ -35,6 +35,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Marca</th>
+                        <th>Descripción</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -43,10 +44,10 @@
                         <tr>
                             <td>{{ marca[0] }}</td>
                             <td>{{ marca[1] }}</td>
+                            <td>{{ marca[2] }}</td>
                             <td>
                                 <button class="botones" onclick="window.location.href='/editarMarca?id={{ marca[0] }}&nombre={{ marca[1] }}&descripcion={{ marca[2] }}';">Editar</button>
-                                <button class="botones agregar" onclick="window.location.href='/EliminarMarca';">Eliminar Marca</button>
-                            </td>
+                                <button class="botones eliminar" onclick="window.location.href='/eliminarMarca?id={{ marca[0] }}&nombre={{ marca[1] }}';">Eliminar</button>                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
