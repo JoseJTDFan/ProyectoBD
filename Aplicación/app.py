@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for,jsonify
 from Conexión import *
 
 app = Flask(__name__, static_folder='Productos')
@@ -34,6 +34,7 @@ def inicio():
             session["tipo"] = usuario[7]
             session["estado"] = usuario[8]
             session["direccion"] = usuario[9]
+            crearCarrito(usuario[0])
         else:
             categorias = getTop5Categorias()
             promociones = getPromocionesInicio()
@@ -113,9 +114,11 @@ def cliente(id):
 def producto_detalle(producto_id):
     producto = getProductoDetalle(producto_id)
     reseñas = getReseñasPorProducto(producto_id)
+    prodSimilares = getProductosSimilares(producto["Categoria"], producto["id"])
     return render_template('producto_detalle.html',
                             producto=producto,
-                            reseñas=reseñas)
+                            reseñas=reseñas,
+                            prodSimilares= prodSimilares)
 
 @app.route('/carrito/<int:id>')
 def carrito(id):
@@ -129,7 +132,13 @@ def carrito(id):
     cliente.append(session["fecha"])
     cliente.append(session["tipo"])
     cliente.append(session["direccion"])
-    return render_template('carrito.html', cliente=cliente)
+    productos = getProductosCarrito(id)
+    precioTotal= 0
+    for producto in productos:
+        precioTotal += producto['precio'] * producto['cantidad']
+    return render_template('carrito.html', cliente=cliente,
+                           productos= productos,
+                           precioTotal= precioTotal)
 # Ruta para la página de reportes
 @app.route('/reportes')
 def reportes():
@@ -198,6 +207,7 @@ def actualizar_usuario():
             promociones=promociones
         )
     return redirect(url_for('cliente', id=id_cliente))
+
 @app.route('/exito', methods=['POST'])
 def exito():
     nombre = request.form.get('nombre')
@@ -244,7 +254,27 @@ def filtro():
     marca = int(marca) if marca else None  
 
     productos = getProductosFiltrados(precio_min, precio_max, categoria, marca, calif_min, calif_max)
-    print(productos)
+    usuario = []
+    usuario.append(session["id"])
+    usuario.append(session["nombre"])
+    usuario.append(session["apellido"])
+    usuario.append(session["correo"])
+    usuario.append(session["contrasena"])
+    usuario.append(session["telefono"])
+    usuario.append(session["fecha"])
+    usuario.append(session["tipo"])
+    usuario.append(session["estado"])
+    usuario.append(session["direccion"])
+    return render_template('filtros.html',
+                               productos=productos,
+                               usuario=usuario)
+
+@app.route('/filtrobusqueda', methods=['POST', 'GET'])
+def filtrobusqueda():
+    # Obtener los valores de los filtros desde los argumentos de la URL
+    busqueda = request.form.get('query')
+    productos = getProductosFiltradosporQuery(busqueda)
+    print(busqueda)
     usuario = []
     usuario.append(session["id"])
     usuario.append(session["nombre"])
@@ -264,7 +294,36 @@ def filtro():
 def usuarios():
     usuarios = getUsuarios()
     return render_template('usuarios.html',
-                           usuarios=usuarios)
+                           usuarios=usuarios) 
+
+@app.route('/subir_reseña/<int:idProducto>', methods=['POST','GET'])
+def subirReseña(idProducto):
+    reseña = request.args.get('reseña')
+    calificacion = request.args.get('calificacion')
+    agregarReseña(idProducto,session["id"], calificacion, reseña)
+    return redirect(url_for('producto_detalle', producto_id=idProducto))
+
+@app.route('/añadir_carrito/<int:id>', methods=['POST'])
+def agregarCarrito(id):
+    carrito = obtenerCarrito(session["id"])
+    cantidad = int(request.form.get('cantidad'))
+    if añadirProducto(id, carrito[0], cantidad):
+        return redirect(url_for('producto_detalle', producto_id=id))
+    else:
+        return "Error al añadir el producto al carrito", 400
+
+@app.route('/actualizar_cantidad', methods=['POST'])
+def actualizarCantidad():
+    idDetalle = int(request.form.get('id'))
+    cantidad = int(request.form.get('cantidad'))
+    actualizarCantidadDetalle(idDetalle,cantidad)
+    return redirect(url_for('carrito', id = session["id"]))
+
+@app.route('/eliminar/<int:detalleid>')
+def eliminarCarrito(detalleid):
+    borrarDetalle(detalleid)
+    return redirect(url_for('carrito', id = session["id"]))
+    
 
 @app.route('/logout')
 def logout():
@@ -580,6 +639,9 @@ def reportess():
     }
     return render_template('reportess.html', usuario=usuario)
 
+@app.route('/getproductos')
+def get_productos():
+    return jsonify(getProductoseID())
 
 if __name__ == '__main__':
     app.run(debug=True)
