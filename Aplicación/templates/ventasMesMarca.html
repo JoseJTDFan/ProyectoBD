@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventas por Mes y Marca</title>
+    <link rel="stylesheet" href="../Productos/style_l.css"/>
+</head>
+<body>
+    <div id="container">
+        <button class="botones" onclick="window.location.href='/reportes';">Regresar</button>
+
+        <header>
+            <h1>Ventas por Mes y Marca</h1>
+        </header>
+        <section>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Marca</th>
+                        <th>Total Ventas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venta in ventas %}
+                    <tr>
+                        <td>{{ venta['Mes'] }}</td>
+                        <td>{{ venta['Marca'] }}</td>
+                        <td>₡{{ venta['TotalVentas'] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3">No hay datos disponibles</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>

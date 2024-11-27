@@ -288,15 +288,22 @@ def registrar_marca():
     return render_template('registrarMarca.html')
 
 
-@app.route('/editarMarca', methods=['GET'])
+@app.route('/editarMarca', methods=['GET', 'POST'])
 def editar_marca():
-    idMarca = request.args.get('id')
-    nombre = request.args.get('nombre')
-    descripcion = request.args.get('descripcion')
-    if idMarca and nombre and descripcion:
-        actualizarMarca(idMarca, nombre, descripcion)
-        return redirect(url_for('brands'))
-    return render_template('editarMarca.html')
+    if request.method == 'POST':
+        idMarca = request.form.get('id')
+        nombre = request.form.get('nombre')
+        descripcion = request.form.get('descripcion')
+        if idMarca and nombre and descripcion:
+            actualizarMarca(idMarca, nombre, descripcion)
+            return redirect(url_for('brands'))
+    else:
+        idMarca = request.args.get('id')
+        nombre = request.args.get('nombre')
+        descripcion = request.args.get('descripcion')
+        if idMarca and nombre and descripcion:
+            return render_template('editarMarca.html', id=idMarca, nombre=nombre, descripcion=descripcion)
+    return redirect(url_for('brands'))
 
 # Ruta para eliminar una marca
 @app.route('/eliminarMarca', methods=['GET'])
@@ -469,7 +476,7 @@ def registrar_promocion():
         fechaFinal = request.form.get('fechaFinal')
         registrarPromocion(idProducto, tipo, descuento, fechaInicio, fechaFinal)
         return redirect(url_for('promociones'))
-    productos = getProductoss()
+    productos = getProductosss()
     return render_template('registrarPromocion.html', productos=productos)
 
 # Ruta para editar una promoción u oferta
@@ -486,25 +493,92 @@ def editar_promocion():
         return redirect(url_for('promociones'))
     else:
         idPromocion = request.args.get('id')
-        idProducto = request.args.get('idProducto')
-        tipo = request.args.get('tipo')
-        descuento = request.args.get('descuento')
-        fechaInicio = request.args.get('fechaInicio')
-        fechaFinal = request.args.get('fechaFinal')
-        if idPromocion and idProducto and tipo and descuento and fechaInicio and fechaFinal:
-            return render_template('editarPromocion.html', id=idPromocion, idProducto=idProducto, tipo=tipo, descuento=descuento, fechaInicio=fechaInicio, fechaFinal=fechaFinal)
+        promocion = getPromocionById(idPromocion)
+        productos = getProductosss()
+        if promocion:
+            return render_template('editarPromocion.html', promocion=promocion, productos=productos)
     return redirect(url_for('promociones'))
 
+
 # Ruta para eliminar una promoción u oferta
-@app.route('/eliminarPromocion', methods=['GET'])
+@app.route('/eliminarPromocion', methods=['GET', 'POST'])
 def eliminar_promocion():
-    idPromocion = request.args.get('id')
-    if idPromocion:
+    if request.method == 'POST':
+        idPromocion = request.form.get('id')
         eliminarPromocion(idPromocion)
         return redirect(url_for('promociones'))
-    return render_template('eliminarPromocion.html')
+    else:
+        idPromocion = request.args.get('id')
+        nombre = request.args.get('nombre')
+        return render_template('eliminarPromocion.html', id=idPromocion, nombre=nombre)
 
 
+@app.route('/login', methods=['POST'])
+def login():
+    usuario = obtener_usuario_por_credenciales(request.form['email'], request.form['password'])
+    if usuario:
+        session['id'] = usuario['id']  # Asegúrate de guardar el ID correctamente
+        return redirect('/historial')
+    else:
+        return "Credenciales incorrectas", 401
+
+
+# Ruta para ver el historial de pedidos
+@app.route('/historialPedidos', methods=['GET'])
+def historial_pedidos():
+    id_usuario = session.get('id')
+    if not id_usuario:
+        return redirect('/login')  # Redirige al login si no hay sesión activa
+    pedidos = obtenerHistorialPedidos(id_usuario)
+    if pedidos is None:
+        pedidos = []
+    return render_template('historialPedidos.html', pedidos=pedidos)
+
+
+# Ruta Top 5
+@app.route('/Top_5')
+def top_5():
+    top5_clientes = obtenerTop5Usuarios()
+
+    if top5_clientes is None:
+        top5_clientes = []  
+
+    return render_template('Top_5.html', clientes=top5_clientes)
+
+
+
+@app.route('/ventasMesMarca') 
+def ventasMesMarca():
+    ventas = obtenerVentasPorMesYMarca()
+    if ventas is None:
+        ventas = []
+    return render_template('ventasMesMarca.html',ventas=ventas)
+
+
+
+@app.route('/verPedido', methods=['GET', 'POST'])
+def ver_pedido():
+    if request.method == 'POST':
+        idPedido = request.form.get('idPedido')
+        nuevoEstado = request.form.get('nuevoEstado')
+        actualizarEstadoPedido(idPedido, nuevoEstado)
+        return redirect(url_for('ver_pedido'))
+    pedidos = obtenerPedidos()
+    return render_template('verPedido.html', pedidos=pedidos)
+
+
+@app.route('/reportes_admin')
+def reportess():
+    usuario = {
+        "id": session.get("id"),
+        "nombre": session.get("nombre"),
+        "apellido": session.get("apellido"),
+        "correo": session.get("correo"),
+        "telefono": session.get("telefono"),
+        "fecha": session.get("fecha"),
+        "tipo": session.get("tipo")
+    }
+    return render_template('reportess.html', usuario=usuario)
 
 
 if __name__ == '__main__':

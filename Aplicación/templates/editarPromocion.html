@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Promoción u Oferta</title>
+    <link rel="stylesheet" href="../Productos/stylepromociones.css"/>
+</head>
+<body>
+    <div id="container">
+        <button class="botones" onclick="window.location.href='/promociones';">Regresar</button>
+        <!-- Encabezado -->
+        <header>
+            <h1>Editar Promoción u Oferta</h1>
+        </header>
+
+        <!-- Formulario de Edición de Promoción u Oferta -->
+        <section id="editar-promocion">
+            <form action="/editarPromocion" method="post">
+                <input type="hidden" name="id" value="{{ promocion['id'] }}">
+                <div class="form-group">
+                    <label for="idProducto">Producto:</label>
+                    <select id="idProducto" name="idProducto" class="inputs" required>
+                        {% for producto in productos %}
+                            <option value="{{ producto['id'] }}" {% if producto['id'] == promocion['idProducto'] %}selected{% endif %}>{{ producto['nombre'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tipo">Tipo:</label>
+                    <select id="tipo" name="tipo" class="inputs" required>
+                        <option value="oferta" {% if promocion['tipo'] == 'oferta' %}selected{% endif %}>Oferta</option>
+                        <option value="promocion" {% if promocion['tipo'] == 'promocion' %}selected{% endif %}>Promoción</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="descuento">Descuento:</label>
+                    <input type="number" step="0.01" id="descuento" name="descuento" class="inputs" value="{{ promocion['descuento'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="fechaInicio">Fecha de Inicio:</label>
+                    <input type="datetime-local" id="fechaInicio" name="fechaInicio" class="inputs" value="{{ promocion['fechaInicio'] }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="fechaFinal">Fecha Final:</label>
+                    <input type="datetime-local" id="fechaFinal" name="fechaFinal" class="inputs" value="{{ promocion['fechaFinal'] }}" required>
+                </div>
+                <button type="submit" class="botones">Guardar Cambios</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Super Doña Juanita - Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

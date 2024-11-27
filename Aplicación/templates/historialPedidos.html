@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Pedidos</title>
+    <link rel="stylesheet" href="../Productos/style_l.css">
+</head>
+<body>
+    <div id="container">
+        <header>
+            <h1>Historial de Pedidos</h1>
+        </header>
+        <section>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pedido ID</th>
+                        <th>Fecha Pedido</th>
+                        <th>Fecha Entrega</th>
+                        <th>Estado</th>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                    <tr>
+                        <td>{{ pedido.PedidoID }}</td>
+                        <td>{{ pedido.FechaPedido }}</td>
+                        <td>{{ pedido.FechaEntrega }}</td>
+                        <td>{{ pedido.EstadoPedido }}</td>
+                        <td>{{ pedido.NombreProducto }}</td>
+                        <td>{{ pedido.CategoriaProducto }}</td>
+                        <td>{{ pedido.Cantidad }}</td>
+                        <td>₡{{ pedido.PrecioUnitario }}</td>
+                        <td>₡{{ pedido.Subtotal }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="9">No hay pedidos disponibles</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+</body>
+</html>

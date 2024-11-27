@@ -8,7 +8,7 @@
 </head>
 <body>
     <div id="container">
-        <button class="botones" onclick="window.location.href='/brands';">Regresar</button>
+        <button class="botones" onclick="window.location.href='/brand';">Regresar</button>
         <!-- Encabezado -->
         <header>
             <h1>Editar Marca</h1>
@@ -16,15 +16,15 @@
 
         <!-- Formulario de Edición de Marca -->
         <section id="editar-marca">
-            <form action="/editarMarca" method="get">
-                <input type="hidden" name="id" value="{{ request.args.get('id') }}">
+            <form action="/editarMarca" method="post">
+                <input type="hidden" name="id" value="{{ id }}">
                 <div class="form-group">
                     <label for="nombre">Nombre de la Marca:</label>
-                    <input type="text" id="nombre" name="nombre" class="inputs" value="{{ request.args.get('nombre') }}" required>
+                    <input type="text" id="nombre" name="nombre" class="inputs" value="{{ nombre }}" required>
                 </div>
                 <div class="form-group">
                     <label for="descripcion">Descripción:</label>
-                    <textarea id="descripcion" name="descripcion" class="inputs" required>{{ request.args.get('descripcion') }}</textarea>
+                    <textarea id="descripcion" name="descripcion" class="inputs" required>{{ descripcion }}</textarea>
                 </div>
                 <button type="submit" class="botones">Guardar Cambios</button>
             </form>

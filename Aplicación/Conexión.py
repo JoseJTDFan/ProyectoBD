@@ -549,7 +549,13 @@ def registrarPromocion(idProducto, tipo, descuento, fechaInicio, fechaFinal):
     try:
         connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
-        cursor.execute("EXEC spRegistrarPromocion @idProducto = ?, @tipo = ?, @descuento = ?, @fechaInicio = ?, @fechaFinal = ?", idProducto, tipo, descuento, fechaInicio, fechaFinal)
+        
+        # Convertir las fechas a cadenas en el formato correcto
+        fechaInicio_str = fechaInicio.replace('T', ' ') + ':00'
+        fechaFinal_str = fechaFinal.replace('T', ' ') + ':00'
+        
+        cursor.execute("EXEC spRegistrarPromocion @idProducto = ?, @tipo = ?, @descuento = ?, @fechaInicio = ?, @fechaFinal = ?", 
+                       idProducto, tipo, descuento, fechaInicio_str, fechaFinal_str)
         connection.commit()
     except Exception as ex:
         print("Error durante la conexión: {}".format(ex))
@@ -557,11 +563,17 @@ def registrarPromocion(idProducto, tipo, descuento, fechaInicio, fechaFinal):
         if 'connection' in locals():
             connection.close()
 
-def actualizarPromocion(id, idProducto, tipo, descuento, fechaInicio, fechaFinal):
+def actualizarPromocion(idPromocion, idProducto, tipo, descuento, fechaInicio, fechaFinal):
     try:
         connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
-        cursor.execute("EXEC spActualizarPromocion @id = ?, @idProducto = ?, @tipo = ?, @descuento = ?, @fechaInicio = ?, @fechaFinal = ?", id, idProducto, tipo, descuento, fechaInicio, fechaFinal)
+        
+        # Convertir las fechas a cadenas en el formato correcto
+        fechaInicio_str = fechaInicio.replace('T', ' ') + ':00'
+        fechaFinal_str = fechaFinal.replace('T', ' ') + ':00'
+        
+        cursor.execute("EXEC spActualizarPromocion @idPromocion = ?, @idProducto = ?, @tipo = ?, @descuento = ?, @fechaInicio = ?, @fechaFinal = ?", 
+                       idPromocion, idProducto, tipo, descuento, fechaInicio_str, fechaFinal_str)
         connection.commit()
     except Exception as ex:
         print("Error durante la conexión: {}".format(ex))
@@ -569,11 +581,210 @@ def actualizarPromocion(id, idProducto, tipo, descuento, fechaInicio, fechaFinal
         if 'connection' in locals():
             connection.close()
 
-def eliminarPromocion(id):
+def eliminarPromocion(idPromocion):
     try:
         connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
-        cursor.execute("EXEC spEliminarPromocion @id = ?", id)
+        cursor.execute("EXEC spEliminarPromocion @idPromocion = ?", idPromocion)
+        connection.commit()
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+
+def getProductosss():
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("SELECT idProducto, nombre FROM Producto WHERE estado = 1")
+        result = cursor.fetchall()
+        productos = []
+        for row in result:
+            productos.append({
+                'id': row[0],
+                'nombre': row[1]
+            })
+        return productos
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+        return []
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+            
+            
+def getPromocionById(idPromocion):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC spObtenerPromocionPorId @idPromocion = ?", idPromocion)
+        result = cursor.fetchone()
+        if result:
+            return {
+                'id': result[0],
+                'idProducto': result[1],
+                'tipo': result[2],
+                'descuento': result[3],
+                'fechaInicio': result[4].strftime('%Y-%m-%dT%H:%M'),
+                'fechaFinal': result[5].strftime('%Y-%m-%dT%H:%M')
+            }
+        return None
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+        return None
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+
+#Historial de Pedidos
+def obtenerHistorialPedidos(id_usuario):
+    import pyodbc
+    try:
+        # Conexión a la base de datos
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+
+        # Ejecutar el procedimiento almacenado
+        cursor.execute("""
+            EXEC HistorialPedidos @idUsuario = ?;
+        """, (id_usuario,))
+
+        # Obtener los resultados
+        resultados = cursor.fetchall()
+            # Convertir a una lista de diccionarios
+        columnas = [column[0] for column in cursor.description]
+        historial = [{columnas[i]: fila[i] for i in range(len(columnas))} for fila in resultados]
+
+        return historial
+    except pyodbc.Error as ex:
+        print(f"Error durante la conexión o ejecución: {ex}")
+        return None
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+
+def obtenerTop5Usuarios():
+    import pyodbc
+    try:
+        # Conexión a la base de datos
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+
+        # Ejecutar el procedimiento almacenado
+        cursor.execute("EXEC Top5Usuarios;")
+
+        # Obtener los resultados
+        resultados = cursor.fetchall()
+
+        # Verificar si hay resultados
+        if resultados:
+            top5 = []
+            for fila in resultados:
+                cliente = {
+                    "Nombre": fila[0],  # Nombre del cliente
+                    "Apellido": fila[1],  # Apellido del cliente
+                    "CantidadPedidos": fila[2],  # Cantidad de pedidos
+                    "MontoTotalCompras": fila[3],  # Monto total de compras
+                    "CantidadArticulosDistintos": fila[4]  # Cantidad de artículos distintos
+                }
+                top5.append(cliente)
+
+            # Imprimir los resultados
+            print("Top 5 Clientes:")
+            for cliente in top5:
+                print(cliente)
+
+            return top5
+        else:
+            print("No se obtuvieron resultados del procedimiento almacenado.")
+            return None
+
+    except pyodbc.Error as ex:
+        print(f"Error durante la conexión o ejecución: {ex}")
+        return None
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+def obtenerVentasPorMesYMarca():
+    import pyodbc
+    try:
+        # Conexión a la base de datos
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+
+        # Ejecutar el procedimiento almacenado
+        cursor.execute("EXEC mesMarca;")
+
+        # Obtener los resultados
+        resultados = cursor.fetchall()
+
+        # Obtener los nombres de las columnas para estructurar los datos
+        columnas = [column[0] for column in cursor.description]
+
+        # Convertir los resultados en una lista de diccionarios
+        ventas_por_mes_y_marca = []
+        for fila in resultados:
+            registro = {columnas[i]: fila[i] for i in range(len(columnas))}
+            ventas_por_mes_y_marca.append(registro)
+
+        # Imprimir los resultados
+        print("Ventas por Mes y Marca:")
+        for venta in ventas_por_mes_y_marca:
+            print(venta)
+
+        return ventas_por_mes_y_marca
+
+    except pyodbc.Error as ex:
+        print(f"Error durante la conexión o ejecución: {ex}")
+        return None
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+
+
+def obtenerPedidos():
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC spObtenerPedidos")
+        result = cursor.fetchall()
+        pedidos = []
+        for row in result:
+            pedidos.append({
+                'PedidoID': row[0],
+                'FechaPedido': row[1],
+                'FechaEntrega': row[2],
+                'EstadoPedido': row[3],
+                'ProductoID': row[4],
+                'Cantidad': row[5],
+                'PrecioUnitario': row[6],
+                'Subtotal': row[7],
+                'NombreProducto': row[8],
+                'CategoriaProducto': row[9]
+            })
+        return pedidos
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+        return []
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+
+
+
+def actualizarEstadoPedido(idPedido, nuevoEstado):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC spActualizarEstadoPedido @idPedido = ?, @nuevoEstado = ?", idPedido, nuevoEstado)
         connection.commit()
     except Exception as ex:
         print("Error durante la conexión: {}".format(ex))

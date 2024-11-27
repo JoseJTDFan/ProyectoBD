@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Pedidos</title>
+    <link rel="stylesheet" href="../Productos/style_l.css">
+</head>
+<body>
+    <div id="container">
+        <button class="botones" onclick="window.location.href='/inicio';">Regresar</button>
+        <header>
+            <h1>Ver Pedidos</h1>
+        </header>
+        <section>
+            <!-- Buscador -->
+            <div class="buscador">
+                <input type="text" class="inputs" placeholder="Buscar pedidos..." id="buscador">
+                <button class="botones" onclick="buscar()">Buscar</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pedido ID</th>
+                        <th>Fecha Pedido</th>
+                        <th>Fecha Entrega</th>
+                        <th>Estado</th>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                    <tr>
+                        <td>{{ pedido.PedidoID }}</td>
+                        <td>{{ pedido.FechaPedido }}</td>
+                        <td>{{ pedido.FechaEntrega }}</td>
+                        <td>{{ pedido.EstadoPedido }}</td>
+                        <td>{{ pedido.NombreProducto }}</td>
+                        <td>{{ pedido.CategoriaProducto }}</td>
+                        <td>{{ pedido.Cantidad }}</td>
+                        <td>₡{{ pedido.PrecioUnitario }}</td>
+                        <td>₡{{ pedido.Subtotal }}</td>
+                        <td>
+                            <form action="/verPedido" method="post">
+                                <input type="hidden" name="idPedido" value="{{ pedido.PedidoID }}">
+                                <select name="nuevoEstado" class="inputs" required>
+                                    <option value="pendiente" {% if pedido.EstadoPedido == 'pendiente' %}selected{% endif %}>Pendiente</option>
+                                    <option value="preparacion" {% if pedido.EstadoPedido == 'preparacion' %}selected{% endif %}>Preparación</option>
+                                    <option value="enviado" {% if pedido.EstadoPedido == 'enviado' %}selected{% endif %}>Enviado</option>
+                                    <option value="entregado" {% if pedido.EstadoPedido == 'entregado' %}selected{% endif %}>Entregado</option>
+                                    <option value="cancelado" {% if pedido.EstadoPedido == 'cancelado' %}selected{% endif %}>Cancelado</option>
+                                </select>
+                                <button type="submit" class="botones">Actualizar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="10">No hay pedidos disponibles</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Super Doña Juanita - Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        function buscar() {
+            const valor = document.getElementById('buscador').value.toLowerCase().trim(); // Texto ingresado por el usuario
+            const filas = document.querySelectorAll('tbody tr'); // Filas de la tabla
+
+            // Recorrer las filas y verificar coincidencias
+            filas.forEach(fila => {
+                const columnas = fila.querySelectorAll('td');
+                const id = columnas[0].textContent.toLowerCase(); // ID del pedido
+                const producto = columnas[4].textContent.toLowerCase(); // Nombre del producto
+
+                // Comprobar si el valor está en alguna de las columnas
+                if (id.includes(valor) || producto.includes(valor)) {
+                    fila.style.display = ''; // Mostrar la fila si coincide
+                } else {
+                    fila.style.display = 'none'; // Ocultar la fila si no coincide
+                }
+            });
+        }
+    </script>
+</body>
+</html>

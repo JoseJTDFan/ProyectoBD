@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Promoción u Oferta</title>
+    <link rel="stylesheet" href="../Productos/stylepromociones.css"/>
+</head>
+<body>
+    <div id="container">
+        <button class="botones" onclick="window.location.href='/promociones';">Regresar</button>
+        <!-- Encabezado -->
+        <header>
+            <h1>Eliminar Promoción u Oferta</h1>
+        </header>
+
+        <!-- Confirmación de Eliminación de Promoción u Oferta -->
+        <section id="eliminar-promocion">
+            <form action="/eliminarPromocion" method="post">
+                <input type="hidden" name="id" value="{{ id }}">
+                <p>¿Estás seguro de que deseas eliminar la promoción u oferta <strong>{{ nombre }}</strong>?</p>
+                <button type="submit" class="botones eliminar">Eliminar</button>
+                <button type="button" class="botones" onclick="window.location.href='/promociones';">Cancelar</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 Super Doña Juanita - Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
