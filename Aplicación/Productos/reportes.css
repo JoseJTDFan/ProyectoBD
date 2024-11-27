@@ -67,3 +67,39 @@ header {
     background-color: #571200;
     transform: scale(0.95);
 }
+
+nav {
+    display: flex; /* Usar flexbox para dividir el espacio */
+    justify-content: space-between; /* Separar los elementos */
+    align-items: center; /* Alinear verticalmente */
+    background-color: brown; /* Fondo azul */
+    padding: 10px 20px; /* Espaciado interno */
+    color: white; /* Color del texto */
+    position: relative;
+}
+
+/* Estilo para las secciones del nav */
+.nav-left,
+.nav-right {
+    display: flex; /* Para manejar múltiples elementos dentro */
+    align-items: center; /* Alinea los elementos verticalmente */
+}
+
+/* Opcional: estilo para los enlaces */
+a {
+    text-decoration: none; /* Sin subrayado */
+    color: white; /* Color del texto */
+    margin: 0 10px; /* Espaciado entre enlaces */
+}
+
+a:hover {
+    text-decoration: underline; /* Subrayar al pasar el cursor */
+}
+
+/* Estilo para los enlaces principales */
+a {
+    text-decoration: none;
+    color: white;
+    margin: 0 10px;
+    cursor: pointer;
+}

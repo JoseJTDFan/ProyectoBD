@@ -10,7 +10,11 @@
     <header>
         <h1>Carrito de Compras</h1>
     </header>
-
+    {% if mensaje %}
+            <div class="error-container">
+                <p class="error">{{ mensaje }}</p>
+            </div>
+    {% endif %}
     <button class="botones" onclick="window.location.href='/inicio';">Regresar</button>
     <button class="botones" onclick="window.location.href='/pagar';">Pagar</button>
 
@@ -75,12 +79,19 @@
             const popup = document.getElementById("quantity-popup");
             const productIdInput = document.getElementById("product-id");
             const newQuantityInput = document.getElementById("new-quantity");
+            const form = document.getElementById("quantity-form"); // Selecciona el formulario
 
+            // Actualiza el ID del producto en el campo oculto
             productIdInput.value = productId;
 
+            // Actualiza el valor de cantidad y el límite máximo
             newQuantityInput.value = currentQuantity;
             newQuantityInput.setAttribute("max", maxStock);
 
+            // Actualiza el atributo action del formulario con el ID del producto
+            form.setAttribute("action", `/actualizar_cantidad/${productId}`);
+
+            // Muestra el popup
             popup.style.display = "block";
         }
 

@@ -1063,5 +1063,16 @@ def agregarReseña(idProducto,idUsuario, calificacion, comentario):
     finally:
         connection.close()
 
-
+def eliminarCarroporUsuario(id):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("exec [dbo].[spEliminarCarrito] @idUsuario = ?", (id,))
+        connection.commit()
+        return True
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+        return False
+    finally:
+        connection.close()
 
