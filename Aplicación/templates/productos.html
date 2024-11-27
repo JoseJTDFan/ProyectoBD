@@ -69,7 +69,12 @@
                     <!-- Botón para aplicar filtros -->
                     <button class="botones" type="submit">Aplicar Filtros</button>
                 </form>
-            </div>            
+            </div>
+            <form action="/filtrobusqueda" method="POST" class="autocomplete-container">
+                <input type="text" class="inputs" placeholder="Buscar productos" id="buscador" name="query" autocomplete="off" required>
+                <div id="suggestions" class="suggestions"></div>
+                <button class="botones" type="submit">Buscar</button>
+            </form>         
         </div>
 
         <div class="nav-right">
@@ -101,6 +106,49 @@
         
                 return true; // Permite el envío del formulario si todo está bien
             }
+            const buscador = document.getElementById('buscador');
+            const suggestionsContainer = document.getElementById('suggestions');
+
+            // Obtener productos del backend
+            let productos = [];
+
+            fetch('/getproductos')
+                .then(response => response.json())
+                .then(data => {
+                    productos = data; // Guardar los productos obtenidos
+                })
+                .catch(error => console.error('Error al obtener los productos:', error));
+
+            // Mostrar sugerencias basadas en el input del usuario
+            buscador.addEventListener('input', function () {
+                const query = this.value.toLowerCase();
+                suggestionsContainer.innerHTML = '';
+
+                if (query) {
+                    const filteredProducts = productos.filter(producto =>
+                        producto.nombre.toLowerCase().includes(query)
+                    );
+
+                    filteredProducts.forEach(producto => {
+                        const item = document.createElement('div');
+                        item.textContent = producto.nombre;
+                        item.classList.add('suggestion-item');
+
+                        // Al hacer clic en una sugerencia, completar el campo de entrada
+                        item.addEventListener('click', function () {
+                            buscador.value = producto.nombre;
+                            suggestionsContainer.innerHTML = '';
+                        });
+
+                        suggestionsContainer.appendChild(item);
+                    });
+                }
+            });
+
+            // Ocultar las sugerencias cuando el campo pierde el foco
+            buscador.addEventListener('blur', function () {
+                setTimeout(() => (suggestionsContainer.innerHTML = ''), 100); // Esperar antes de ocultar para permitir el clic
+            });
         </script>
     </nav>
 

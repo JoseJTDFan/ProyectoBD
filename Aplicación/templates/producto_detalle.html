@@ -24,16 +24,69 @@
                 <p class="categoria">Categoría: {{ producto.Categoria }}</p>
                 <p class="marca">Marca: {{ producto.Marca }}</p>
                 <p class="descripcion">{{ producto.descripcion }}</p>
-                <form action="/añadir_carrito" method="post">
+                <form action="/añadir_carrito/{{producto.id}}" method="post">
                     <input type="hidden" name="producto_id" value="{{ producto.id }}">
+                    <label for="cantidad">Cantidad:</label>
+                    <input type="number" class="inputs "id="cantidad" name="cantidad" required min="1" max="{{producto.Stock}}">
                     <button type="submit" class="boton-carrito">Añadir al carrito</button>
-                    <label for="cantidad">        Cantidad:</label>
-                    <input type="number" class="inputs "id="telefono" name="telefono" required min="1" max="{{producto.Stock}}">
                 </form>
                 <!-- Botón para regresar utilizando JavaScript -->
             </div>
+            <div class="clearfix"></div>
+
+            
         </div>
+        <section id="ofertas">
+            <article class="ofertas">
+                <h1>Productos Similares</h1>
+                <ul>
+                    {% for producto in prodSimilares %}
+                        <li>
+                            <a href="/producto_detalle/{{producto.id}}">
+                                <img src="/{{producto.imagen }}" alt="{{ producto.nombre }}" width="100">
+                            </a>                        <h4>{{ producto.nombre }}</h4>
+                            {% if producto.tienedesc %}
+                                <h5>
+                                    <p>
+                                        <del>₡{{ producto.precio }}</del>  ₡{{ producto.descuento }}
+                                    </p>
+                                </h5>
+                            {% else %}
+                                <h5>
+                                    <p>₡{{ producto.precio }}</p>
+                                </h5>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </article>
+        </section>
+        <div class="clearfix"></div>
+
         <div id="reseñas-container">
+            <h1>Deja tu reseña:</h1>
+            <form action="/subir_reseña/{{producto.id}}" method="GET" class="review-form">
+                <label for="reseña" class="review-label">Tu opinión:</label>
+                <textarea id="reseña" name="reseña" class="review-input" rows="5" maxlength="250" required placeholder="Escribe tu experiencia..."></textarea>
+        
+                <label for="calificacion" class="review-label">Calificación:</label>
+                <div class="rating">
+                    <input type="radio" id="star5" name="calificacion" value="5" required>
+                    <label for="star5" title="5 estrellas">★</label>
+                    <input type="radio" id="star4" name="calificacion" value="4">
+                    <label for="star4" title="4 estrellas">★</label>
+                    <input type="radio" id="star3" name="calificacion" value="3">
+                    <label for="star3" title="3 estrellas">★</label>
+                    <input type="radio" id="star2" name="calificacion" value="2">
+                    <label for="star2" title="2 estrellas">★</label>
+                    <input type="radio" id="star1" name="calificacion" value="1">
+                    <label for="star1" title="1 estrella">★</label>
+                </div>
+        
+                <div class="button-group">
+                    <button type="submit" class="btn submit" >Enviar Reseña</button>
+                </div>
+            </form>
             {% for reseña in reseñas %}
             <div class="card-reseña">
                 <div class="card-header">

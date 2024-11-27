@@ -103,6 +103,31 @@ def getProductos(num):
     finally:
         connection.close()
 
+def getProductosSimilares(categoria, idproducto):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC spObtenerProductosSimilares @categoria = ?, @idproducto = ?",  (categoria, idproducto))
+        rows = cursor.fetchall()
+        lista=[]
+        for row in rows:
+            print(row)
+            lista.append({
+                'id': row[0],
+                'nombre': row[1],
+                'precio': float(row[2]),  # Convertir Decimal a float
+                'descuento': float(row[3]),  # Convertir Decimal a float
+                'imagen': row[4],
+                'tienedesc': row[5]
+            })
+        return lista
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+
+    finally:
+        connection.close()
+
+
 def getUsuario(id):
     try:
         connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
@@ -277,6 +302,33 @@ def getProductosFiltrados(precio_min, precio_max, categoria, marca, calif_min, c
         if 'connection' in locals() and connection:
             connection.close()
 
+def getProductosFiltradosporQuery(busqueda):
+    try:
+        # Conexión a la base de datos
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        
+        # Ejecución del procedimiento almacenado
+        cursor.execute("exec [dbo].[ObtenerProductosPorNombre] @Query = ?", (busqueda))
+        rows = cursor.fetchall()
+        lista=[]
+        for row in rows:
+            lista.append({
+                'id': row[0],
+                'nombre': row[1],
+                'precio': float(row[2]),  # Convertir Decimal a float
+                'descuento': float(row[3]),  # Convertir Decimal a float
+                'imagen': row[4],
+                'tienedesc': row[5]
+            })
+            print(lista)
+        return lista
+    except Exception as ex:
+        print("Error durante la ejecución: {}".format(ex))
+    finally:
+        if 'connection' in locals() and connection:
+            connection.close()
+
 def getUsuarios():
     try:
         connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
@@ -289,34 +341,145 @@ def getUsuarios():
     finally:
         connection.close()
 
-def obtenerOCrearCarrito(id_usuario):
-    import pyodbc
+def getProductoseID():
     try:
-        # Conexión a la base de datos
         connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
         cursor = connection.cursor()
+        cursor.execute("exec [dbo].[spLeerProductos]")
+        rows = cursor.fetchall()
+        lista=[]
+        for row in rows:
+                lista.append({
+                    'id': row[0],
+                    'nombre': row[2]
+                })
+        return lista
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        connection.close()
 
-        # Ejecutar el procedimiento almacenado
-        cursor.execute("""
-            EXEC sp_RevisarOCrearCarrito @idUsuario = ?;
-        """, (id_usuario,))  # Usa una tupla incluso para un solo parámetro
+def crearCarrito(id_usuario):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC spCrearCarrito @idUsuario = ?", (id_usuario,))
+        connection.commit()
+        print("Carrito creado exitosamente.")
+        return True
 
-        # Obtener el resultado
-        result = cursor.fetchone()
-
-        # Verificar si hay un resultado
-        if result:
-            id_carrito = result[0]  # El idCarrito es el primer valor de la tupla
-            print(f"Carrito ID: {id_carrito}")
-            return id_carrito
-        else:
-            print("No se obtuvo un resultado del procedimiento almacenado.")
-            return None
     except pyodbc.Error as ex:
-        print(f"Error durante la conexión o ejecución: {ex}")
-        return None
+        print(f"Error al conectar o ejecutar el procedimiento: {ex}")
+        return False
+
     finally:
         if 'connection' in locals():
             connection.close()
 
-obtenerOCrearCarrito(1)
+def obtenerCarrito(idUsuario):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC [dbo].[spObtenerCarrito] @idUsuario = ?", idUsuario)
+        result = cursor.fetchone()
+        if result:
+            return result
+        else:
+            return False
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        connection.close()
+
+def añadirProducto(id, idCarrito, cantidad):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("EXEC [dbo].[spAgregarDetalleCarrito] @idProducto = ?, @idCarrito = ?, @cantidad = ?", 
+                       (id, idCarrito, cantidad))
+        connection.commit()
+        if cursor.rowcount > 0:
+            print("Producto añadido exitosamente.")
+            return True
+        else:
+            print("No se pudo añadir el producto.")
+            return False
+    except pyodbc.Error as ex:  # Error específico de la base de datos
+        print("Error durante la ejecución: {}".format(ex))
+        return False
+    except Exception as ex:  # Otros errores de Python
+        print("Error durante la conexión o ejecución: {}".format(ex))
+        return False
+    finally:
+        if 'connection' in locals():
+            connection.close()
+
+def getProductosCarrito(id):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("exec spObtenerCarritoPorUsuario @idUsuario = ?", id)
+        rows = cursor.fetchall()
+        lista=[]
+        for row in rows:
+                lista.append({
+                    'fecha': row[0].strftime('%d/%m/%Y'),
+                    'idProducto': row[1],  # Convertir Decimal a float
+                    'cantidad': row[2],  # Convertir Decimal a float
+                    'precio': row[4],  # Formatear fecha
+                    'nombre': row[5],
+                    'imagen': row[6],
+                    'id': row[7],
+                    'stock': row[8]
+                })
+        return lista
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        connection.close()
+
+def borrarDetalle(id):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("exec spBorrarDetalle @idDetalle = ?", id)
+        connection.commit()
+        if cursor.rowcount > 0:
+            print("Producto eliminado exitosamente.")
+            return True
+        else:
+            print("No se pudo eliminar el producto.")
+            return False
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+    finally:
+        connection.close()
+
+def actualizarCantidadDetalle(id,cantidad):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("exec actualizarCantidadDetalle @idDetalle = ?, @cantidad = ?", (id,cantidad))
+        connection.commit()
+        return True
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+        return False
+    finally:
+        connection.close()
+
+def agregarReseña(idProducto,idUsuario, calificacion, comentario):
+    try:
+        connection = pyodbc.connect(f'DRIVER={{SQL Server}};SERVER={SERVER_NAME};DATABASE={DATABASE_NAME};UID={USER};PWD={PASSWORD}')
+        cursor = connection.cursor()
+        cursor.execute("exec [dbo].[spAgregarReseña] @id_producto = ?, @id_usuario = ?, @calificacion= ?, @comentario= ?", (idProducto,idUsuario, calificacion, comentario))
+        connection.commit()
+        return True
+    except Exception as ex:
+        print("Error durante la conexión: {}".format(ex))
+        return False
+    finally:
+        connection.close()
+
+
+
