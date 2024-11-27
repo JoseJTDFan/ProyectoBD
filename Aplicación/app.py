@@ -310,14 +310,43 @@ def agregarCarrito(id):
     if añadirProducto(id, carrito[0], cantidad):
         return redirect(url_for('producto_detalle', producto_id=id))
     else:
-        return "Error al añadir el producto al carrito", 400
+        producto = getProductoDetalle(id)
+        reseñas = getReseñasPorProducto(id)
+        prodSimilares = getProductosSimilares(producto["Categoria"], producto["id"])
+        return render_template(
+            'producto_detalle.html',
+            mensaje="No se pudo añadir el producto al carrito, posiblemente stock no suficiente.",
+            producto=producto,
+            reseñas=reseñas,
+            prodSimilares= prodSimilares)
 
-@app.route('/actualizar_cantidad', methods=['POST'])
-def actualizarCantidad():
+@app.route('/actualizar_cantidad/<int:productoid>', methods=['POST'])
+def actualizarCantidad(productoid):
     idDetalle = int(request.form.get('id'))
     cantidad = int(request.form.get('cantidad'))
-    actualizarCantidadDetalle(idDetalle,cantidad)
-    return redirect(url_for('carrito', id = session["id"]))
+    if actualizarCantidadDetalle(idDetalle,cantidad):
+        return redirect(url_for('carrito', id = session["id"]))
+    else:
+        cliente=[]
+        cliente.append(session["id"])
+        cliente.append(session["nombre"])
+        cliente.append(session["apellido"])
+        cliente.append(session["correo"])
+        cliente.append(session["contrasena"])
+        cliente.append(session["telefono"])
+        cliente.append(session["fecha"])
+        cliente.append(session["tipo"])
+        cliente.append(session["direccion"])
+        productos = getProductosCarrito(productoid)
+        precioTotal= 0
+        for producto in productos:
+            precioTotal += producto['precio'] * producto['cantidad']
+        return render_template('carrito.html', 
+                            mensaje="No se pudo añadir el producto al carrito, posiblemente stock no suficiente..",
+                            cliente=cliente,
+                            productos= productos,
+                            precioTotal= precioTotal)
+    
 
 @app.route('/eliminar/<int:detalleid>')
 def eliminarCarrito(detalleid):
@@ -327,6 +356,7 @@ def eliminarCarrito(detalleid):
 
 @app.route('/logout')
 def logout():
+    eliminarCarroporUsuario(session["id"])
     session.clear()  # Limpia la sesión
     return redirect(url_for('home'))  # Redirige a la función 'home'
 
@@ -515,7 +545,29 @@ def eliminar_producto():
         return redirect(url_for('productos'))
     return render_template('eliminarProducto.html')
 
-
+@app.route('/pagar', methods=['GET'])
+def pagar():
+    cliente=[]
+    cliente.append(session["id"])
+    cliente.append(session["nombre"])
+    cliente.append(session["apellido"])
+    cliente.append(session["correo"])
+    cliente.append(session["contrasena"])
+    cliente.append(session["telefono"])
+    cliente.append(session["fecha"])
+    cliente.append(session["tipo"])
+    cliente.append(session["direccion"])
+    productos = getProductosCarrito(session["id"])
+    precioTotal= 0
+    for producto in productos:
+        producto["precio"] = producto["precio"]*producto["cantidad"]
+    for producto in productos:
+        precioTotal += producto['precio'] * producto['cantidad']
+    return render_template('pagar.html',
+                           cliente=cliente,
+                           productos=productos,
+                           precioTotal=precioTotal,
+                           precioDelivery=precioTotal+2000)
 
 
 # Ruta para la página de promociones y ofertas

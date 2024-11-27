@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Doña Juanita</title>
+    <link rel="stylesheet" href="Productos/pagar.css"/>
+</head>
+<body>
+    <button class="botones" onclick="window.location.href='/carrito/{{cliente[0]}}';">Regresar</button>
+    <div id = "container">
+        <header>
+            <h1>Pantalla de Pago</h1>
+        </header>
+    </div>
+    <div class="checkout-container">
+        <!-- Dirección de Envío -->
+        <div id="shipping" class="window active">
+            <h2>Dirección de Envío</h2>
+            <form id="shipping-form">
+                <div class="form-group">
+                    <label for="id">Número de Cliente:</label>
+                    <input type="text" id="id" name="id" value="{{cliente[0]}}"  readonly required>
+                </div>
+                <div class="form-group">
+                    <label for="name">Nombre Completo:</label>
+                    <input type="text" id="name" name="name" placeholder="Tu nombre completo" value="{{cliente[1]}} {{cliente[2]}}" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Dirección:</label>
+                    <input type="text" id="address" name="address" placeholder="Calle, número, colonia..." value="{{cliente[8]}}" required>
+                </div>
+                <div class="form-group">
+                    <label for="city">Ciudad:</label>
+                    <select id="city" name="city" required>
+                        <option value="" disabled selected>Selecciona tu ciudad</option>
+                        {% for ciudad in ciudades %}
+                        <option value="{{ ciudad }}">{{ ciudad }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="postal-code">Código Postal:</label>
+                    <input type="text" id="postal-code" name="postal-code" placeholder="Código Postal" required>
+                </div>
+            </form>
+                <button class= "botones" onclick="validateAndNext('shipping-form', 'payment')">Siguiente</button>
+        </div>
+
+        <!-- Método de Pago -->
+        <div id="payment" class="window">
+            <h2>Método de Pago</h2>
+            <form id="payment-form">
+                <div class="form-group">
+                    <label for="card-name">Nombre en la Tarjeta:</label>
+                    <input type="text" id="card-name" name="card-name" placeholder="Nombre como aparece en la tarjeta" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-number">Número de Tarjeta:</label>
+                    <input type="text" id="card-number" name="card-number" placeholder="1234 5678 9101 1121" required>
+                </div>
+                <div class="form-group">
+                    <label for="expiry-date">Fecha de Expiración:</label>
+                    <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/AA" required>
+                </div>
+                <div class="form-group">
+                    <label for="cvv">CVV:</label>
+                    <input type="text" id="cvv" name="cvv" placeholder="Código de seguridad" required>
+                </div>
+            </form>
+            
+                <button class="botones" onclick="previousWindow('shipping')">Atrás</button>
+                <button class="botones" onclick="validateAndNext('payment-form', 'summary')">Siguiente</button>
+        </div>
+
+        <!-- Resumen del Pedido -->
+        <div id="summary" class="window">
+            <h2>Resumen del Pedido</h2>
+            <div class="summary">
+                <p id="summary-id">Número de Cliente: 15</p>
+                <h3><p id="summary-name">Nombre Completo: 0</p></h3>
+                ------------------------------------------------------
+                <p id="summary-direction">Dirección: 0</p>
+                <p id="summary-city">Ciudad: 0</p></p>
+                <p id="summary-postalcode">Código Postal 0</p></p>
+                ------------------------------------------------------
+                <p id="summary-card-number">Número de tarjeta: 0</p>
+                <p id="summary-expiry-date">Fecha de expiración: 0</p>
+                ------------------------------------------------------
+                <div class="productos-container">
+                    {% for producto in productos %}
+                    <div class="producto-item">
+                        <img src="/{{ producto.imagen }}" alt="{{ producto.nombre }}" class="producto-imagen">
+                        <div class="producto-detalles">
+                            <h5 class="producto-nombre">{{ producto.nombre }}</h5>
+                            <h5 class="producto-cantidad">Cantidad: {{ producto.cantidad }}</h5>
+                            <p class="producto-precio">₡{{ producto.precio }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                ------------------------------------------------------
+                <p id="summary-price">Precio: {{precioTotal}}</p>
+                <p id="summary-total-price">Delivery: 2000</p>
+                <p id="summary-total-price">Precio Total: {{precioDelivery}}</p>
+            </div>
+            <button class="botones" onclick="previousWindow('payment')">Atrás</button>
+            <a href="/confirmar_pedido" class="checkout-btn">Finalizar Compra</a>
+        </div>
+    </div>
+
+    <script>
+        const listaCiudades = [
+            "San José",
+            "Alajuela",
+            "Cartago",
+            "Heredia",
+            "Puntarenas",
+            "Limón",
+            "Liberia",
+            "San Ramón",
+            "Pérez Zeledón",
+            "Grecia",
+            "Santa Cruz",
+            "Quepos",
+            "Jacó",
+            "Escazú",
+            "Turrialba",
+            "Tilarán",
+            "Palmares"
+        ];
+
+        const select = document.getElementById('city');
+
+        listaCiudades.forEach(ciudad => {
+            const option = document.createElement('option');
+            option.value = ciudad;
+            option.textContent = ciudad;
+            select.appendChild(option);
+        });
+        function validateAndNext(formId, nextId) {
+            const form = document.getElementById(formId);
+            let valid = true;
+
+            // Verifica cada campo requerido en el formulario
+            form.querySelectorAll('input[required]').forEach(input => {
+                if (!input.value.trim()) {
+                    input.classList.add('error');
+                    valid = false;
+                } else {
+                    input.classList.remove('error');
+                }
+            });
+
+            if (valid) {
+                if (nextId === 'summary') {
+                    updateSummary();
+                }
+                nextWindow(nextId);
+            } else {
+                alert('Por favor, completa todos los campos antes de continuar.');
+            }
+        }
+
+        function updateSummary() {
+            // Obtén los valores del formulario
+            const id = document.getElementById('id').value;
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const postalCode = document.getElementById('postal-code').value;
+            const cardNumber = document.getElementById('card-number').value;
+            const ExpDate = document.getElementById('expiry-date').value;
+
+            // Actualiza los elementos del resumen en el DOM
+            document.getElementById('summary-id').textContent = `Número de Cliente: ${id}`;
+            document.getElementById('summary-name').textContent = `Nombre Completo: ${name}`;
+            document.getElementById('summary-direction').textContent = `Dirección: ${address}`;
+            document.getElementById('summary-city').textContent = `Ciudad: ${city}`;
+            document.getElementById('summary-postalcode').textContent = `Código Postal: ${postalCode}`;
+            document.getElementById('summary-card-number').textContent = `Número de Tarjeta: ${cardNumber}`;
+            document.getElementById('summary-expiry-date').textContent = `Fecha de Expiración: ${ExpDate}`;
+        }
+
+        function nextWindow(nextId) {
+            document.querySelectorAll('.window').forEach(window => {
+                window.classList.remove('active');
+            });
+            document.getElementById(nextId).classList.add('active');
+        }
+
+        function previousWindow(previousId) {
+            document.querySelectorAll('.window').forEach(window => {
+                window.classList.remove('active');
+            });
+            document.getElementById(previousId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

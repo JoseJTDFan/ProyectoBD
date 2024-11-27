@@ -12,6 +12,11 @@
         <header>
             <h1>{{ producto.nombre }}</h1>
         </header>
+        {% if mensaje %}
+            <div class="error-container">
+                <p class="error">{{ mensaje }}</p>
+            </div>
+        {% endif %}
         <div class="producto-detalle">
             <div class="producto-imagen">
                 <img src="/{{ producto.imagen }}" alt="{{ producto.nombre }}" width="300">

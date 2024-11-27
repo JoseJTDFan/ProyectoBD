@@ -248,3 +248,19 @@ a {
 .popup .botones {
     margin-top: 10px;
 }
+
+.error-container {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid red;
+    background-color: #ffe6e6; /* Rojo claro */
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Estilo para el texto del mensaje */
+.error {
+    color: #ff0000; /* Rojo intenso */
+    font-weight: bold;
+    font-size: 12px;
+}
